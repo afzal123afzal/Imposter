@@ -188,6 +188,85 @@
         .animate-turn-glow {
             animation: turn-pulse-glow 2s infinite ease-in-out;
         }
+
+        @keyframes crown-float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-5deg);
+            }
+
+            50% {
+                transform: translateY(-5px) rotate(5deg);
+            }
+        }
+
+        .animate-crown {
+            animation: crown-float 3s infinite ease-in-out;
+        }
+
+        .gold-glow {
+            box-shadow: 0 0 30px rgba(234, 179, 8, 0.3);
+            border-color: rgba(234, 179, 8, 0.5) !important;
+        }
+
+        @keyframes silver-shimmer {
+
+            0%,
+            100% {
+                border-color: rgba(148, 163, 184, 0.4);
+                box-shadow: 0 0 10px rgba(148, 163, 184, 0.1);
+            }
+
+            50% {
+                border-color: rgba(148, 163, 184, 0.8);
+                box-shadow: 0 0 20px rgba(148, 163, 184, 0.3);
+            }
+        }
+
+        .animate-silver {
+            animation: silver-shimmer 3s infinite ease-in-out;
+        }
+
+        @keyframes bronze-shimmer {
+
+            0%,
+            100% {
+                border-color: rgba(180, 83, 9, 0.4);
+                box-shadow: 0 0 10px rgba(180, 83, 9, 0.1);
+            }
+
+            50% {
+                border-color: rgba(180, 83, 9, 0.8);
+                box-shadow: 0 0 20px rgba(180, 83, 9, 0.3);
+            }
+        }
+
+        .animate-bronze {
+            animation: bronze-shimmer 3s infinite ease-in-out;
+        }
+
+        .silver-glow {
+            border-color: rgba(148, 163, 184, 0.4) !important;
+        }
+
+        .bronze-glow {
+            border-color: rgba(180, 83, 9, 0.4) !important;
+        }
+
+        @keyframes progress {
+            0% {
+                width: 0%;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        .animate-progress {
+            animation: progress 5s linear forwards;
+        }
     </style>
 </head>
 
@@ -200,7 +279,7 @@
             <div class="animate-in fade-in zoom-in duration-500">
                 <div class="text-center mb-10">
                     <h1
-                        class="space-header text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-indigo-400 to-emerald-400 leading-none py-1">
+                        class="space-header text-4xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-indigo-400 to-emerald-400 leading-none py-1">
                         IMPOSTER GAME !!!</h1>
                     <p
                         class="text-[10px] font-black uppercase tracking-[0.8em] text-slate-600 mt-2 opacity-80 leading-none italic">
@@ -209,7 +288,7 @@
 
                 <div class="max-w-md mx-auto mb-10 group relative">
                     <input type="text" x-model="playerName" placeholder="Agent Name Please"
-                        class="w-full glass-bright p-6 rounded-3xl text-center font-black focus:ring-1 focus:ring-purple-500 outline-none uppercase tracking-widest placeholder:text-slate-800 text-xl input-glow-purple transition-all shadow-inner">
+                        class="w-full glass-bright p-5 md:p-6 rounded-2xl md:rounded-3xl text-center font-black focus:ring-1 focus:ring-purple-500 outline-none uppercase tracking-widest placeholder:text-slate-800 text-lg md:text-xl input-glow-purple transition-all shadow-inner">
                     <div
                         class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-purple-600 text-[9px] font-bold uppercase tracking-widest rounded-lg text-white shadow-xl z-20">
                         Your Name Please</div>
@@ -217,13 +296,14 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
                     <div
-                        class="glass p-10 rounded-[3rem] border-white/5 flex flex-col justify-between neon-glow-purple group transition-all hover:bg-white/5 relative overflow-hidden">
+                        class="glass p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border-white/5 flex flex-col justify-between neon-glow-purple group transition-all hover:bg-white/5 relative overflow-hidden">
                         <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-600/10 blur-3xl rounded-full"></div>
                         <div class="mb-10 text-center relative z-10">
                             <p
                                 class="text-[9px] text-purple-400 font-black uppercase tracking-[0.5em] mb-3 opacity-80 italic">
                                 Command Authorization</p>
-                            <h2 class="text-4xl font-black text-white uppercase tracking-tighter leading-none">
+                            <h2
+                                class="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter leading-none">
                                 INITIALIZE HOST</h2>
                             <p
                                 class="mt-4 text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed max-w-[200px] mx-auto">
@@ -234,26 +314,29 @@
                                 Hub Capacity (Max Agents)</p>
                             <div class="flex items-center justify-center space-x-6">
                                 <button @click="maxPlayers = Math.max(3, maxPlayers - 1)"
-                                    class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-white font-black flex items-center justify-center hover:bg-white/10 transition-all">-</button>
-                                <span class="text-3xl font-black text-purple-500 w-16 text-center tabular-nums"
+                                    class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-white/5 border border-white/10 text-white font-black flex items-center justify-center hover:bg-white/10 transition-all">-</button>
+                                <span
+                                    class="text-2xl md:text-3xl font-black text-purple-500 w-12 md:w-16 text-center tabular-nums"
                                     x-text="maxPlayers"></span>
                                 <button @click="maxPlayers = Math.min(50, maxPlayers + 1)"
-                                    class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-white font-black flex items-center justify-center hover:bg-white/10 transition-all">+</button>
+                                    class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-white/5 border border-white/10 text-white font-black flex items-center justify-center hover:bg-white/10 transition-all">+</button>
                             </div>
                         </div>
                         <button @click="createRoom()" :disabled="!playerName || joinCode || signaling"
-                            class="btn-premium w-full bg-gradient-to-br from-purple-600 to-indigo-800 p-7 rounded-3xl text-white font-black uppercase tracking-[0.5em] shadow-2xl disabled:opacity-20 text-base">
+                            class="btn-premium w-full bg-gradient-to-br from-purple-600 to-indigo-800 p-5 md:p-7 rounded-2xl md:rounded-3xl text-white font-black uppercase tracking-[0.3em] md:tracking-[0.5em] shadow-2xl disabled:opacity-20 text-sm md:text-base">
                             <span x-text="signaling ? 'SYNCING...' : 'DEPLOY HUB'"></span>
                         </button>
                     </div>
                     <div
-                        class="glass p-10 rounded-[3rem] border-white/5 flex flex-col justify-between neon-glow-cyan border-emerald-500/10 group transition-all hover:bg-white/5 relative overflow-hidden">
+                        class="glass p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border-white/5 flex flex-col justify-between neon-glow-cyan border-emerald-500/10 group transition-all hover:bg-white/5 relative overflow-hidden">
                         <div class="absolute -top-10 -left-10 w-32 h-32 bg-emerald-600/10 blur-3xl rounded-full"></div>
                         <div class="mb-10 text-center relative z-10">
                             <p
                                 class="text-[9px] text-emerald-400 font-black uppercase tracking-[0.5em] mb-3 opacity-80 italic">
                                 Signal Bridge Reception</p>
-                            <h2 class="text-4xl font-black text-white uppercase tracking-tighter leading-none">CONNECT
+                            <h2
+                                class="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter leading-none">
+                                CONNECT
                                 BRIDGE</h2>
                             <p
                                 class="mt-4 text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed max-w-[200px] mx-auto">
@@ -291,10 +374,11 @@
         <!-- STEP: LOBBY -->
         <template x-if="step === 'lobby'">
             <div
-                class="glass p-8 rounded-[3rem] animate-in slide-in-from-bottom-5 duration-500 shadow-2xl relative overflow-hidden">
+                class="glass p-5 md:p-8 rounded-[2rem] md:rounded-[3rem] animate-in slide-in-from-bottom-5 duration-500 shadow-2xl relative overflow-hidden">
                 <div class="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
                     <div>
-                        <h2 class="space-header text-3xl font-black text-white leading-none uppercase tracking-tighter">
+                        <h2
+                            class="space-header text-2xl md:text-3xl font-black text-white leading-none uppercase tracking-tighter">
                             TACTICAL HUB</h2>
                         <p
                             class="text-[9px] text-indigo-400 font-black uppercase tracking-[0.3em] mt-2 opacity-70 italic">
@@ -305,7 +389,8 @@
                             class="bg-black/30 p-4 rounded-[1.5rem] text-center shadow-inner border border-white/5 min-w-[120px]">
                             <p class="text-[8px] text-slate-500 uppercase font-black mb-1 tracking-widest leading-none">
                                 ID CODE</p>
-                            <p class="text-3xl font-black text-white tracking-[0.2em] leading-none" x-text="roomID"></p>
+                            <p class="text-2xl md:text-3xl font-black text-white tracking-[0.2em] leading-none"
+                                x-text="roomID"></p>
                         </div>
                         <button @click="copyLink()"
                             class="btn-premium px-6 py-2 bg-indigo-500/10 border border-indigo-500/30 rounded-full text-[8px] font-black uppercase tracking-widest text-indigo-400 hover:bg-indigo-500/20">
@@ -317,7 +402,7 @@
                 <!-- HOST CONFIGURATION -->
                 <template x-if="isHost">
                     <div
-                        class="mb-8 p-6 glass-bright border border-white/5 rounded-[2rem] flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                        class="mb-8 p-4 md:p-6 glass-bright border border-white/5 rounded-[1.5rem] md:rounded-[2rem] flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
                         <div>
                             <p
                                 class="text-[9px] text-indigo-400 font-black uppercase tracking-[0.3em] mb-1 opacity-70 italic">
@@ -429,16 +514,16 @@
         <!-- STEP: REVEAL (RESTORED TACTICAL LOADER) -->
         <template x-if="step === 'reveal'">
             <div
-                class="glass p-10 rounded-[3.5rem] text-center shadow-2xl animate-in zoom-in duration-500 relative overflow-hidden">
+                class="glass p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] text-center shadow-2xl animate-in zoom-in duration-500 relative overflow-hidden">
                 <div class="mb-8">
                     <p class="text-[10px] text-indigo-400 font-black uppercase tracking-[0.4em] mb-2 opacity-70">
                         Identity Authentication</p>
-                    <h2 class="text-5xl font-black text-white uppercase tracking-tighter leading-none"
+                    <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none"
                         x-text="playerName"></h2>
                 </div>
 
                 <div x-show="!readyToChat" class="max-w-md mx-auto">
-                    <div class="w-full h-72 glass-bright border-2 border-dashed border-indigo-500/20 rounded-[2.5rem] flex flex-col items-center justify-center cursor-pointer group hover:bg-white/5 transition-all relative overflow-hidden"
+                    <div class="w-full h-64 md:h-72 glass-bright border-2 border-dashed border-indigo-500/20 rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center justify-center cursor-pointer group hover:bg-white/5 transition-all relative overflow-hidden"
                         @click="wordVisible = true">
                         <div x-show="!wordVisible" class="text-center">
                             <div
@@ -456,7 +541,7 @@
                             <template x-if="myRole && myRole.isImposter">
                                 <div class="mb-8">
                                     <span
-                                        class="px-5 py-2 bg-red-600/20 border border-red-500 text-red-500 text-[10px] font-black uppercase tracking-[0.4em] rounded-full shadow-lg animate-pulse">INFILTRATOR
+                                        class="px-5 py-2 bg-red-600/20 border border-red-500 text-red-500 text-[10px] font-black uppercase tracking-[0.4em] rounded-full shadow-lg animate-pulse inline-block whitespace-nowrap">INFILTRATOR
                                         DETECTED</span>
                                     <p
                                         class="mt-4 text-white/50 text-[9px] font-black uppercase tracking-widest leading-none italic">
@@ -468,13 +553,13 @@
                                     class="text-[10px] text-indigo-400 uppercase font-black mb-6 tracking-[0.4em] leading-none italic opacity-80">
                                     Payload Protocol Intel</p>
                             </template>
-                            <p class="text-7xl font-black text-white uppercase tracking-tighter leading-none"
+                            <p class="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none"
                                 x-text="myRole && myRole.isImposter ? 'IMPOSTER' : (myRole ? myRole.word : 'ERROR')">
                             </p>
                         </div>
                     </div>
                     <button @click="markReady()"
-                        class="btn-premium w-full mt-8 py-6 rounded-[2rem] bg-white text-slate-950 font-black uppercase tracking-[0.4em] transition-all hover:bg-slate-200 shadow-xl"
+                        class="btn-premium w-full mt-8 py-5 md:py-6 rounded-[1.5rem] md:rounded-[2rem] bg-white text-slate-950 font-black uppercase tracking-[0.4em] transition-all hover:bg-slate-200 shadow-xl"
                         :disabled="!wordVisible" :class="!wordVisible ? 'opacity-0' : 'opacity-100'">Acknowledge
                         Intel</button>
                 </div>
@@ -494,15 +579,15 @@
 
         <!-- STEP: ACTIVE -->
         <template x-if="step === 'active'">
-            <div class="glass p-8 rounded-[3rem] shadow-2xl h-[90vh] flex flex-col relative overflow-hidden transition-all duration-500"
-                :class="isMyTurn ? 'animate-turn-glow border-indigo-500/50' : 'border-white/5'">
+            <div class="glass p-5 md:p-8 rounded-[2rem] md:rounded-[3rem] shadow-2xl min-h-[500px] h-[85vh] md:h-[90vh] flex flex-col relative overflow-hidden transition-all duration-500"
+                :class="isMyTurn ? 'animate-turn-glow border-indigo-500 ring-4 ring-indigo-500/20' : 'border-white/5'">
 
                 <div class="absolute top-0 left-0 timer-bar" :class="timer < 10 ? 'pulse-red' : ''"
                     :style="'width: ' + (timer / 30 * 100) + '%'"></div>
                 <div class="flex justify-between items-start mb-8 px-2">
                     <div>
                         <h2
-                            class="text-3xl font-black text-white space-header uppercase leading-none tracking-tighter italic opacity-90">
+                            class="text-2xl md:text-3xl font-black text-white space-header uppercase leading-none tracking-tighter italic opacity-90">
                             MISSION FEED</h2>
                         <div class="flex items-center mt-4">
                             <span
@@ -510,11 +595,18 @@
                                 <span x-text="currentRound"></span> / 2</span>
                         </div>
                     </div>
-                    <div class="text-right">
-                        <p
-                            class="text-[9px] text-slate-600 uppercase font-black tracking-widest mb-1 italic leading-none opacity-80">
-                            HUB LEAD</p>
-                        <p class="text-2xl font-black text-indigo-400 uppercase leading-none tracking-tighter"
+                    <div class="text-right flex flex-col items-end">
+                        <div class="flex items-center space-x-2 mb-2 justify-end">
+                            <p
+                                class="text-[9px] text-slate-600 uppercase font-black tracking-widest italic leading-none opacity-80">
+                                HUB LEAD</p>
+                            <template x-if="isMyTurn">
+                                <span
+                                    class="text-[8px] bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-2 py-1 rounded-full font-black uppercase tracking-widest animate-pulse border border-white/20 shadow-lg shadow-emerald-900/40">YOUR
+                                    TURN</span>
+                            </template>
+                        </div>
+                        <p class="text-xl md:text-2xl font-black text-indigo-400 uppercase leading-none tracking-tighter"
                             x-text="activePlayerName"></p>
                     </div>
                 </div>
@@ -540,16 +632,20 @@
                         class="flex-1 overflow-y-auto mb-4 custom-scrollbar space-y-3 pr-2"
                         x-init="$watch('clues', () => { $nextTick(() => { $refs.intelFeed.scrollTop = $refs.intelFeed.scrollHeight; }) })">
                         <template x-for="c in clues">
-                            <div
-                                class="p-4 glass-bright border-white/5 rounded-[1.5rem] animate-in slide-in-from-left-2 transition-all">
-                                <div class="flex justify-between items-end mb-2 px-1">
-                                    <span
-                                        class="text-[10px] font-black text-indigo-500/80 uppercase tracking-widest leading-none"
-                                        x-text="c.player"></span>
-                                    <span class="text-[8px] text-slate-700 font-black uppercase tracking-widest italic"
+                            <div class="p-4 border-l-4 rounded-r-[1.5rem] rounded-l-lg animate-in slide-in-from-left-2 transition-all"
+                                :class="c.player === playerName ? 'bg-indigo-500/10 border-indigo-500/50 ml-4' : 'bg-white/5 border-indigo-500/20 mr-4'">
+                                <div class="flex justify-between items-center mb-2 px-1">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-black text-white uppercase shadow-lg shadow-black/20"
+                                            :class="getPlayerColor(c.player)" x-text="c.player[0]"></div>
+                                        <span class="text-[10px] font-black uppercase tracking-widest leading-none"
+                                            :class="c.player === playerName ? 'text-indigo-400' : 'text-slate-400'"
+                                            x-text="c.player"></span>
+                                    </div>
+                                    <span class="text-[7px] text-slate-700 font-black uppercase tracking-widest italic"
                                         x-text="'PHASE ' + c.round"></span>
                                 </div>
-                                <p class="text-white text-lg font-bold leading-tight uppercase tracking-tight"
+                                <p class="text-white text-base md:text-lg font-bold leading-tight uppercase tracking-tight pl-8"
                                     x-text="c.text"></p>
                             </div>
                         </template>
@@ -560,14 +656,19 @@
                         <div class="flex-1 overflow-y-auto mb-4 custom-scrollbar space-y-3 pr-2" x-ref="generalChatBox"
                             x-init="$watch('messages', () => { $nextTick(() => { $refs.generalChatBox.scrollTop = $refs.generalChatBox.scrollHeight; }) })">
                             <template x-for="msg in messages">
-                                <div
-                                    class="p-3 bg-white/5 rounded-xl border border-white/5 animate-in slide-in-from-bottom-1">
+                                <div class="p-3 bg-white/5 rounded-xl border-l-2 border-white/10 animate-in slide-in-from-bottom-1"
+                                    :class="msg.name === playerName ? 'border-indigo-500/50 bg-indigo-500/5' : 'border-slate-700'">
                                     <div class="flex justify-between items-baseline mb-1">
-                                        <span class="text-[9px] font-black text-indigo-400 uppercase tracking-widest"
-                                            x-text="msg.name"></span>
+                                        <div class="flex items-center space-x-2">
+                                            <div class="w-4 h-4 rounded bg-indigo-600 flex items-center justify-center text-[7px] font-black text-white uppercase"
+                                                :class="getPlayerColor(msg.name)" x-text="msg.name[0]"></div>
+                                            <span class="text-[9px] font-black uppercase tracking-widest"
+                                                :class="msg.name === playerName ? 'text-indigo-400' : 'text-slate-400'"
+                                                x-text="msg.name"></span>
+                                        </div>
                                         <span class="text-[7px] text-slate-700 font-bold" x-text="msg.time"></span>
                                     </div>
-                                    <p class="text-[10px] font-bold text-white/90 uppercase tracking-wider leading-relaxed"
+                                    <p class="text-[10px] font-bold text-white/90 uppercase tracking-wider leading-relaxed pl-6"
                                         x-text="msg.text"></p>
                                 </div>
                             </template>
@@ -575,26 +676,26 @@
                         <div class="flex-none flex space-x-2">
                             <input type="text" x-model="chatInput" @keydown.enter="sendChatMessage()"
                                 placeholder="General transmission..."
-                                class="flex-1 glass-bright p-4 rounded-xl text-[10px] font-black focus:ring-1 focus:ring-indigo-500 outline-none uppercase tracking-widest placeholder:text-slate-800 text-white">
+                                class="flex-1 glass-bright p-3 md:p-4 rounded-xl text-[10px] font-black focus:ring-1 focus:ring-indigo-500 outline-none uppercase tracking-widest placeholder:text-slate-800 text-white">
                             <button @click="sendChatMessage()"
-                                class="px-5 bg-indigo-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg active:scale-95">SEND</button>
+                                class="px-3 md:px-5 flex-shrink-0 bg-indigo-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg active:scale-95">SEND</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex-none space-y-4 pt-4 border-t border-white/10 mt-auto">
                     <div x-show="isMyTurn" class="animate-in slide-in-from-bottom-2">
-                        <div class="flex items-center justify-center mb-2">
+                        <div class="flex items-center justify-center mb-3">
                             <span
-                                class="text-[8px] bg-indigo-600 text-white px-3 py-1 rounded-full font-black uppercase tracking-[0.3em] animate-pulse">Your
-                                Turn - Transmitting Intel</span>
+                                class="text-[9px] bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-5 py-2 rounded-full font-black uppercase tracking-[0.3em] animate-pulse shadow-xl border border-white/20">YOUR
+                                TURN - TRANSMITTING INTEL</span>
                         </div>
                         <div class="flex space-x-3">
                             <input type="text" x-model="clueInput" @keydown.enter="submitClue()"
                                 placeholder="Enter intel clue..."
-                                class="flex-1 glass-bright p-5 rounded-[1.2rem] font-bold outline-none uppercase text-sm placeholder:text-slate-800 transition-all text-center tracking-widest input-glow border border-indigo-500/30">
-                            <button @click="submitClue()" :disabled="!clueInput"
-                                class="px-8 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.2rem] font-black uppercase text-xs transition-all shadow-lg active:scale-95">SEND</button>
+                                class="flex-1 glass-bright p-3 md:p-5 rounded-[1.2rem] font-bold outline-none uppercase text-xs md:text-sm placeholder:text-slate-800 transition-all text-center tracking-widest input-glow border border-indigo-500/30">
+                            <button @click="submitClue()" :disabled="!clueInput || !isMyTurn"
+                                class="px-4 md:px-8 flex-shrink-0 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.2rem] font-black uppercase text-xs transition-all shadow-lg active:scale-95 disabled:opacity-30">SEND</button>
                         </div>
                         <p
                             class="text-center text-[9px] text-indigo-400 font-black mt-3 uppercase tracking-[0.4em] opacity-80">
@@ -602,14 +703,23 @@
                         </p>
                     </div>
                     <div x-show="!isMyTurn"
-                        class="text-center p-6 bg-white/5 border border-white/5 rounded-[2rem] animate-pulse">
-                        <p x-show="activePlayerIndex < players.length"
-                            class="text-slate-600 font-black text-[10px] uppercase tracking-[0.5em] italic opacity-80 leading-none">
-                            Awaiting Operative Frequency from <span x-text="activePlayerName"
-                                class="text-white px-1"></span>...</p>
-                        <p x-show="activePlayerIndex >= players.length"
-                            class="text-indigo-400 font-black text-[10px] uppercase tracking-[0.5em] italic opacity-80 leading-none">
-                            Phase Hub Synchronization in progress (5s)...</p>
+                        class="text-center p-6 bg-white/5 border border-white/5 rounded-[2rem] transition-all duration-500 overflow-hidden relative min-h-[80px] flex flex-col justify-center">
+                        <div x-show="!isTransitioning" class="animate-pulse">
+                            <p
+                                class="text-slate-600 font-black text-[10px] uppercase tracking-[0.5em] italic opacity-80 leading-none">
+                                Awaiting Operative Frequency from <span x-text="activePlayerName"
+                                    class="text-white px-1"></span>...</p>
+                        </div>
+                        <div x-show="isTransitioning" class="space-y-4 animate-in fade-in zoom-in duration-500">
+                            <div class="h-1 w-48 mx-auto bg-white/5 rounded-full overflow-hidden">
+                                <div
+                                    class="h-full bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.5)] animate-progress">
+                                </div>
+                            </div>
+                            <p
+                                class="text-indigo-400 font-black text-[9px] uppercase tracking-[0.4em] italic leading-none animate-pulse">
+                                Phase Hub Synchronization In Progress...</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -618,12 +728,13 @@
         <!-- STEP: EXTENSION VOTE -->
         <template x-if="step === 'extension_vote'">
             <div
-                class="glass p-12 rounded-[4rem] text-center shadow-2xl animate-in slide-in-from-bottom-5 max-w-2xl w-full mx-auto border border-white/5">
+                class="glass p-8 md:p-12 rounded-[2.5rem] md:rounded-[4rem] text-center shadow-2xl animate-in slide-in-from-bottom-5 max-w-2xl w-full mx-auto border border-white/5">
                 <div class="mb-8 p-4 bg-indigo-500/10 rounded-full inline-block border border-indigo-500/20">
                     <p class="text-[10px] text-indigo-400 font-black uppercase tracking-[0.5em] italic">Intelligence
                         Protocol Deviation</p>
                 </div>
-                <h2 class="text-4xl font-black text-white uppercase tracking-tighter mb-4 italic">Request Additional
+                <h2 class="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter mb-4 italic">Request
+                    Additional
                     Intel?</h2>
                 <p
                     class="text-slate-400 text-xs font-bold uppercase tracking-widest leading-relaxed mb-10 max-w-sm mx-auto">
@@ -641,8 +752,40 @@
                     </button>
                 </div>
 
-                <div x-show="hasVotedExtension">
-                    <div class="p-8 glass-bright rounded-[2.5rem] border border-white/5 animate-pulse">
+                <div x-show="hasVotedExtension || isHost">
+                    <!-- Host Live Counter (Visible to Host during voting) -->
+                    <template x-if="isHost && (extensionVotes.yes + extensionVotes.no < players.length)">
+                        <div class="mb-8 p-6 glass-bright rounded-3xl border border-white/10 animate-in fade-in">
+                            <p class="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em] mb-4">Signal
+                                Quorum Status</p>
+                            <div class="flex items-center justify-between mb-3 px-2">
+                                <div class="text-left">
+                                    <span
+                                        class="block text-[10px] text-slate-500 font-black uppercase">Affirmative</span>
+                                    <span class="text-2xl font-black text-green-400" x-text="extensionVotes.yes"></span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="block text-[10px] text-slate-500 font-black uppercase">Negative</span>
+                                    <span class="text-2xl font-black text-red-400" x-text="extensionVotes.no"></span>
+                                </div>
+                            </div>
+                            <div class="w-full h-2 bg-white/5 rounded-full overflow-hidden flex shadow-inner">
+                                <div class="h-full bg-green-500 transition-all duration-500"
+                                    :style="'width: ' + (extensionVotes.yes / players.length * 100) + '%'"></div>
+                                <div class="h-full bg-red-500 transition-all duration-500"
+                                    :style="'width: ' + (extensionVotes.no / players.length * 100) + '%'"></div>
+                            </div>
+                            <p
+                                class="text-[8px] text-slate-600 font-black mt-3 uppercase tracking-widest italic leading-none">
+                                Synchronizing: <span x-text="extensionVotes.yes + extensionVotes.no"
+                                    class="text-indigo-400"></span> / <span x-text="players.length"></span> Agents
+                            </p>
+                        </div>
+                    </template>
+
+                    <!-- Awaiting Message (Visible to non-hosts or host if no counts yet) -->
+                    <div x-show="!isHost || (extensionVotes.yes + extensionVotes.no === 0)"
+                        class="p-8 glass-bright rounded-[2.5rem] border border-white/5 animate-pulse">
                         <p class="text-indigo-400 text-[10px] font-black uppercase tracking-[0.5em] mb-4">Awaiting
                             Signal Quorum</p>
                         <div class="flex justify-center space-x-2">
@@ -651,206 +794,282 @@
                             </template>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Host Approval Phase (Only visible to Host) -->
-                    <template x-if="isHost && (extensionVotes.yes + extensionVotes.no >= players.length)">
-                        <div class="mt-8 pt-8 border-t border-white/10 animate-in fade-in zoom-in">
-                            <h3 class="text-xl font-black text-white uppercase tracking-tighter mb-6">Majority Decision:
+                <template x-if="isHost && (extensionVotes.yes + extensionVotes.no >= players.length)">
+                    <div class="mt-8 pt-8 border-t border-white/10 animate-in fade-in zoom-in">
+                        <div class="mb-8 p-6 bg-white/5 rounded-3xl border border-indigo-500/20">
+                            <p class="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em] mb-2">Final
+                                Quorum Decision</p>
+                            <h3 class="text-3xl font-black text-white uppercase tracking-tighter">
                                 <span class="text-indigo-400"
-                                    x-text="extensionVotes.yes > extensionVotes.no ? 'EXTEND' : 'END'"></span>
+                                    x-text="extensionVotes.yes > extensionVotes.no ? 'EXTEND PROTOCOL' : 'TERMINATE PHASE'"></span>
                             </h3>
-                            <div class="flex space-x-4">
-                                <button @click="decideExtension(true)"
-                                    class="flex-1 bg-green-600 hover:bg-green-500 text-white p-5 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg">APPROVE
-                                    PHASE 3</button>
-                                <button @click="decideExtension(false)"
-                                    class="flex-1 bg-red-600 hover:bg-red-500 text-white p-5 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg">DENY
-                                    EXTENSION</button>
+                            <div
+                                class="flex items-center justify-center space-x-4 mt-4 text-[10px] font-black uppercase tracking-widest">
+                                <span class="text-green-400">YES: <span x-text="extensionVotes.yes"></span></span>
+                                <span class="text-slate-700">|</span>
+                                <span class="text-red-400">NO: <span x-text="extensionVotes.no"></span></span>
                             </div>
                         </div>
-                    </template>
-                </div>
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <button @click="decideExtension(true)"
+                                class="flex-1 bg-green-600 hover:bg-green-500 text-white p-5 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg active:scale-95">APPROVE
+                                PHASE 3</button>
+                            <button @click="decideExtension(false)"
+                                class="flex-1 bg-red-600 hover:bg-red-500 text-white p-5 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg active:scale-95">DENY
+                                EXTENSION</button>
+                        </div>
+                    </div>
+                </template>
             </div>
-        </template>
+    </div>
+    </template>
 
-        <!-- STEP: VOTE -->
-        <template x-if="step === 'vote'">
-            <div
-                class="glass p-12 rounded-[4rem] text-center shadow-2xl animate-in slide-in-from-bottom-5 relative overflow-hidden">
-                <div class="absolute top-4 right-8">
-                    <button @click="showArchive = !showArchive"
-                        class="bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-widest hover:bg-indigo-600/40 transition-all">
-                        <span x-text="showArchive ? 'CLOSE ARCHIVE' : 'REVIEW INTEL ARCHIVE'"></span>
-                    </button>
-                </div>
+    <!-- STEP: VOTE -->
+    <template x-if="step === 'vote'">
+        <div
+            class="glass p-6 md:p-12 rounded-[2.5rem] md:rounded-[4rem] text-center shadow-2xl animate-in slide-in-from-bottom-5 relative overflow-hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+                <h2 class="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter italic leading-none">
+                    IDENTIFY BREACH</h2>
+                <button @click="showArchive = !showArchive"
+                    class="self-center md:self-auto bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-widest hover:bg-indigo-600/40 transition-all flex items-center space-x-2">
+                    <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path>
+                        <path fill-rule="evenodd"
+                            d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span x-text="showArchive ? 'CLOSE ARCHIVE' : 'REVIEW INTEL ARCHIVE'"></span>
+                </button>
+            </div>
 
-                <!-- INTEL ARCHIVE PANEL -->
-                <div x-show="showArchive" class="mb-10 animate-in fade-in slide-in-from-top-4 duration-300">
-                    <div
-                        class="p-6 bg-white/5 rounded-[2.5rem] border border-white/5 text-left max-h-[40vh] overflow-y-auto custom-scrollbar space-y-4">
-                        <div class="flex space-x-4 mb-4 border-b border-white/5 pb-2">
-                            <p class="text-[9px] text-white/40 font-black uppercase tracking-widest">Historical intel
-                                logs recovered</p>
-                        </div>
-                        <template x-for="c in clues">
-                            <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="text-[9px] font-black text-indigo-400 uppercase tracking-widest"
-                                        x-text="c.player"></span>
-                                    <span class="text-[7px] text-slate-600 uppercase"
-                                        x-text="'Phase ' + c.round"></span>
-                                </div>
-                                <p class="text-white text-xs font-bold uppercase tracking-wider" x-text="c.text"></p>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-
-                <div class="mb-10" x-show="!showArchive">
-                    <h2 class="text-4xl font-black text-white uppercase tracking-tighter italic">IDENTIFY BREACH</h2>
-                    <div
-                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[50vh] overflow-y-auto p-8 custom-scrollbar">
-                        <template x-for="p in roles">
-                            <button @click="handleVoteClick(p.peerID)" :disabled="p.peerID === myPeerID || hasVoted"
-                                class="p-8 rounded-[2rem] glass-bright border border-white/10 hover:border-red-600/50 hover:scale-[1.03] transition-all font-black text-xl text-white shadow-xl flex flex-col items-center justify-center relative disabled:opacity-30 group">
-                                <span x-text="p.name" class="leading-none"></span>
-                                <span x-show="voteCounts && voteCounts[p.peerID]"
-                                    class="absolute -top-4 -right-4 w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-[11px] font-black shadow-[0_0_20px_rgba(220,38,38,0.4)] animate-bounce border-2 border-white/20 z-50 tabular-nums"
-                                    x-text="voteCounts[p.peerID]"></span>
-                            </button>
-                        </template>
-                    </div>
-                    <div class="mt-10 text-center" x-show="hasVoted">
-                        <p
-                            class="text-indigo-400 font-black text-[11px] uppercase tracking-[0.6em] animate-pulse italic opacity-80">
-                            Synchronizing Selection Quorum...</p>
-                    </div>
-                </div>
-        </template>
-
-        <!-- ERROR MODAL -->
-        <template x-if="errorState.active">
-            <div
-                class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
+            <!-- INTEL ARCHIVE PANEL -->
+            <div x-show="showArchive" class="mb-10 animate-in fade-in slide-in-from-top-4 duration-300">
                 <div
-                    class="glass-bright p-10 rounded-[3rem] border border-red-500/30 max-w-md w-full text-center shadow-[0_0_50px_rgba(239,68,68,0.2)] animate-in zoom-in-95 duration-300">
-                    <div
-                        class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-500/20">
-                        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-                            </path>
-                        </svg>
+                    class="p-6 bg-white/5 rounded-[2.5rem] border border-white/5 text-left max-h-[40vh] overflow-y-auto custom-scrollbar space-y-4">
+                    <div class="flex space-x-4 mb-4 border-b border-white/5 pb-2">
+                        <p class="text-[9px] text-white/40 font-black uppercase tracking-widest">Historical intel logs
+                            recovered</p>
                     </div>
-                    <h2 class="text-2xl font-black text-white uppercase tracking-tighter mb-2 italic"
-                        x-text="errorState.title"></h2>
-                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest leading-relaxed mb-8"
-                        x-text="errorState.message"></p>
-                    <button @click="errorState.active = false"
-                        class="w-full bg-red-600 hover:bg-red-500 text-white p-5 rounded-2xl font-black uppercase text-xs tracking-widest transition-all shadow-lg active:scale-95">
-                        Acknowledged
-                    </button>
-                </div>
-            </div>
-        </template>
-
-        <!-- STEP: RESULT -->
-        <template x-if="step === 'result'">
-            <div
-                class="glass p-12 rounded-[4rem] text-center shadow-2xl relative overflow-hidden animate-in fade-in transition-all border border-white/5 max-w-4xl w-full mx-auto">
-
-                <div class="absolute top-8 right-12">
-                    <button @click="showArchive = !showArchive"
-                        class="bg-white/5 border border-white/10 text-slate-500 px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-widest hover:bg-white/10 transition-all">
-                        <span x-text="showArchive ? 'VIEW RANKS' : 'REVIEW ARCHIVE'"></span>
-                    </button>
-                </div>
-
-                <h2 class="text-6xl font-black text-white mb-4 uppercase tracking-tighter leading-none animate-header-reveal"
-                    x-text="winner === 'citizens' ? 'SUCCESS' : 'BREACH'"></h2>
-
-                <div x-show="showArchive"
-                    class="mb-8 p-6 bg-white/5 rounded-[2.5rem] text-left max-h-[35vh] overflow-y-auto custom-scrollbar space-y-3">
                     <template x-for="c in clues">
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-[9px] font-black text-indigo-400 uppercase" x-text="c.player"></span>
-                                <span class="text-[7px] text-slate-600 uppercase" x-text="'Phase ' + c.round"></span>
+                        <div class="p-4 rounded-r-[1.5rem] rounded-l-lg border-l-4 transition-all"
+                            :class="c.player === playerName ? 'bg-indigo-500/10 border-indigo-500/50' : 'bg-white/5 border-slate-700/30'">
+                            <div class="flex justify-between items-center mb-2 px-1">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-black text-white uppercase shadow-lg shadow-black/20"
+                                        :class="getPlayerColor(c.player)" x-text="c.player[0]"></div>
+                                    <span class="text-[10px] font-black uppercase tracking-widest leading-none"
+                                        :class="c.player === playerName ? 'text-indigo-400' : 'text-slate-400'"
+                                        x-text="c.player"></span>
+                                </div>
+                                <span class="text-[7px] text-slate-700 font-black uppercase tracking-widest italic"
+                                    x-text="'PHASE ' + c.round"></span>
                             </div>
-                            <p class="text-white text-xs font-bold uppercase" x-text="c.text"></p>
+                            <p class="text-[11px] font-black text-white uppercase tracking-wider leading-relaxed pl-8"
+                                x-text="c.text"></p>
                         </div>
                     </template>
                 </div>
+            </div>
 
-                <div x-show="!showArchive">
-                    <div class="mb-10 animate-in fade-in zoom-in duration-700 delay-300">
-                        <p
-                            class="text-[10px] text-slate-500 font-black uppercase tracking-[0.5em] mb-3 opacity-60 italic">
-                            Mission Payload</p>
-                        <div
-                            class="bg-white/5 border border-white/5 rounded-[2rem] py-4 px-10 inline-block shadow-inner backdrop-blur-sm">
-                            <p class="text-4xl font-black text-white uppercase tracking-widest leading-none"
-                                x-text="currentPair[1]"></p>
-                        </div>
-                    </div>
-
-                    <div class="space-y-6">
-                        <p
-                            class="text-[10px] text-slate-500 font-black uppercase tracking-[0.6em] mb-6 opacity-60 italic">
-                            Hub Ranking Board</p>
-                        <div
-                            class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[40vh] overflow-y-auto custom-scrollbar p-6">
-                            <template x-for="p in roles">
-                                <div class="flex items-center justify-between p-6 bg-white/5 rounded-[2.5rem] border border-white/5 hover:bg-white/10 transition-all group relative overflow-hidden"
-                                    :class="p.isImposter ? 'animate-imposter border-red-500/40' : (winner === 'citizens' ? 'animate-winner border-yellow-500/30' : '')">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-white uppercase text-base shadow-xl border border-white/5"
-                                            :class="p.isImposter ? 'bg-red-600' : 'bg-indigo-600'" x-text="p.name[0]">
-                                        </div>
-                                        <div class="text-left">
-                                            <p class="text-base font-black text-white uppercase tracking-tighter leading-none"
-                                                x-text="p.name"></p>
-                                            <template x-if="p.isImposter">
-                                                <span
-                                                    class="mt-2 inline-block text-[8px] text-red-500 font-black uppercase tracking-[0.3em] italic leading-none animate-pulse">STATUS:
-                                                    EXPOSED</span>
-                                            </template>
-                                            <template x-if="!p.isImposter && winner === 'citizens'">
-                                                <span
-                                                    class="mt-2 inline-block text-[8px] text-yellow-500 font-black uppercase tracking-[0.3em] italic leading-none">STATUS:
-                                                    SECURED</span>
-                                            </template>
-                                        </div>
-                                    </div>
-                                    <div class="text-3xl font-black text-white tabular-nums opacity-90 px-4"
-                                        x-text="scores[p.peerID] || 0"></div>
-
-                                    <!-- Decorative Highlight -->
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000">
-                                    </div>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-
-                    <div class="mt-12 flex flex-col md:flex-row gap-4">
-                        <button @click="returnToLobby()"
-                            class="btn-premium flex-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-800 py-6 rounded-[2.5rem] font-black uppercase tracking-[0.4em] text-white shadow-xl text-base hover:scale-[1.02] active:scale-95 transition-all">
-                            Next Extraction
+            <div x-show="!showArchive">
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[50vh] overflow-y-auto p-8 custom-scrollbar">
+                    <template x-for="p in roles">
+                        <button @click="handleVoteClick(p.peerID)" :disabled="p.peerID === myPeerID || hasVoted"
+                            class="p-4 md:p-8 rounded-2xl md:rounded-[2rem] glass-bright border border-white/10 hover:border-red-600/50 hover:scale-[1.03] transition-all font-black text-lg md:text-xl text-white shadow-xl flex flex-col items-center justify-center relative disabled:opacity-30 group">
+                            <span x-text="p.name" class="leading-none"></span>
+                            <span x-show="voteCounts && voteCounts[p.peerID]"
+                                class="absolute -top-4 -right-4 w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-[11px] font-black shadow-[0_0_20px_rgba(220,38,38,0.4)] animate-bounce border-2 border-white/20 z-50 tabular-nums"
+                                x-text="voteCounts[p.peerID]"></span>
                         </button>
-                        <button @click="location.reload()"
-                            class="btn-premium px-12 bg-white/5 border border-white/10 rounded-[2.5rem] font-black uppercase tracking-[0.3em] text-slate-600 text-[10px] hover:bg-white/10 hover:text-slate-400">
-                            Terminate Hub
-                        </button>
+                    </template>
+                </div>
+                <div class="mt-10 text-center" x-show="hasVoted">
+                    <p
+                        class="text-indigo-400 font-black text-[11px] uppercase tracking-[0.6em] animate-pulse italic opacity-80">
+                        Synchronizing Selection Quorum...</p>
+                </div>
+            </div>
+    </template>
+
+    <!-- ERROR MODAL -->
+    <template x-if="errorState.active">
+        <div
+            class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
+            <div
+                class="glass-bright p-10 rounded-[3rem] border border-red-500/30 max-w-md w-full text-center shadow-[0_0_50px_rgba(239,68,68,0.2)] animate-in zoom-in-95 duration-300">
+                <div
+                    class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-500/20">
+                    <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                        </path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-black text-white uppercase tracking-tighter mb-2 italic"
+                    x-text="errorState.title"></h2>
+                <p class="text-slate-400 text-xs font-bold uppercase tracking-widest leading-relaxed mb-8"
+                    x-text="errorState.message"></p>
+                <button @click="errorState.active = false"
+                    class="w-full bg-red-600 hover:bg-red-500 text-white p-5 rounded-2xl font-black uppercase text-xs tracking-widest transition-all shadow-lg active:scale-95">
+                    Acknowledged
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <!-- STEP: RESULT -->
+    <template x-if="step === 'result'">
+        <div
+            class="glass p-6 md:p-12 rounded-[2.5rem] md:rounded-[4rem] text-center shadow-2xl relative overflow-hidden animate-in fade-in transition-all border border-white/5 max-w-4xl w-full mx-auto">
+
+            <div class="relative flex flex-col items-center justify-center mb-8">
+                <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none animate-header-reveal text-center"
+                    x-text="winner === 'citizens' ? 'SUCCESS' : 'BREACH'"></h2>
+                <button @click="showArchive = !showArchive"
+                    class="mt-4 md:mt-0 md:absolute md:right-0 bg-white/5 border border-white/10 text-slate-500 px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center space-x-2">
+                    <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path>
+                        <path fill-rule="evenodd"
+                            d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span x-text="showArchive ? 'VIEW RANKS' : 'REVIEW ARCHIVE'"></span>
+                </button>
+            </div>
+
+            <div x-show="showArchive"
+                class="mb-8 p-6 bg-white/5 rounded-[2.5rem] text-left max-h-[35vh] overflow-y-auto custom-scrollbar space-y-3">
+                <template x-for="c in clues">
+                    <div class="p-4 rounded-r-[1.5rem] rounded-l-lg border-l-4 transition-all"
+                        :class="c.player === playerName ? 'bg-indigo-500/10 border-indigo-500/50' : 'bg-white/5 border-slate-700/30'">
+                        <div class="flex justify-between items-center mb-2 px-1">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-black text-white uppercase shadow-lg shadow-black/20"
+                                    :class="getPlayerColor(c.player)" x-text="c.player[0]"></div>
+                                <span class="text-[10px] font-black uppercase tracking-widest leading-none"
+                                    :class="c.player === playerName ? 'text-indigo-400' : 'text-slate-400'"
+                                    x-text="c.player"></span>
+                            </div>
+                            <span class="text-[7px] text-slate-700 font-black uppercase tracking-widest italic"
+                                x-text="'PHASE ' + c.round"></span>
+                        </div>
+                        <p class="text-[11px] font-black text-white uppercase tracking-wider leading-relaxed pl-8"
+                            x-text="c.text"></p>
+                    </div>
+                </template>
+            </div>
+
+            <div x-show="!showArchive">
+                <div class="mb-12 animate-in fade-in zoom-in duration-700 delay-300 text-center">
+                    <p class="text-[10px] text-slate-500 font-black uppercase tracking-[0.5em] mb-4 opacity-60 italic">
+                        MISSION PAYLOAD</p>
+                    <div
+                        class="bg-white/5 border border-white/5 rounded-[2rem] py-5 px-12 inline-block shadow-inner backdrop-blur-sm hover:border-indigo-500/30 transition-all">
+                        <p class="text-4xl md:text-5xl font-black text-white uppercase tracking-widest leading-none"
+                            x-text="currentPair[0]"></p>
                     </div>
                 </div>
-        </template>
 
-        <div class="fixed bottom-10 left-1/2 -translate-x-1/2 px-8 py-4 glass border-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.5em] text-indigo-400 shadow-2xl z-50 transition-all duration-500 translate-y-20 opacity-0"
-            :class="toastActive ? 'toast-active' : ''">
-            Mission Link Copied to Terminal
-        </div>
+                <div class="space-y-6">
+                    <p class="text-[10px] text-slate-500 font-black uppercase tracking-[0.6em] mb-6 opacity-60 italic">
+                        Hub Ranking Board</p>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[40vh] overflow-y-auto custom-scrollbar p-3 md:p-6">
+                        <template x-for="(p, index) in getSortedPlayers()">
+                            <div class="flex items-center justify-between p-4 md:p-6 bg-white/5 rounded-2xl md:rounded-[2.5rem] border border-white/5 hover:bg-white/10 transition-all group relative overflow-hidden"
+                                :class="{
+                                    'animate-imposter border-red-500/40': p.isImposter,
+                                    'animate-winner gold-glow border-yellow-500/50 scale-[1.02] z-10': index === 0,
+                                    'animate-silver silver-glow': index === 1,
+                                    'animate-bronze bronze-glow': index === 2
+                                }">
+
+                                <div class="flex items-center space-x-3 md:space-x-4 min-w-0">
+                                    <div class="relative">
+                                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-white uppercase text-base shadow-xl border border-white/5"
+                                            :class="p.isImposter ? 'bg-red-600' : (index === 0 ? 'bg-yellow-500' : 'bg-indigo-600')"
+                                            x-text="p.name[0]">
+                                        </div>
+                                        <!-- CROWN FOR TOP PLAYER -->
+                                        <template x-if="index === 0">
+                                            <div class="absolute -top-6 -left-2 text-2xl animate-crown drop-shadow-lg">
+                                                👑</div>
+                                        </template>
+                                        <template x-if="index === 1">
+                                            <div class="absolute -top-4 -left-1 text-lg opacity-80 drop-shadow-md">🥈
+                                            </div>
+                                        </template>
+                                        <template x-if="index === 2">
+                                            <div class="absolute -top-4 -left-1 text-lg opacity-80 drop-shadow-md">🥉
+                                            </div>
+                                        </template>
+                                        <!-- RANK BADGE -->
+                                        <div class="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-black/80 border border-white/10 flex items-center justify-center text-[10px] font-black text-white"
+                                            x-text="index + 1"></div>
+                                    </div>
+
+                                    <div class="text-left min-w-0 flex-1">
+                                        <div class="flex items-center space-x-2 min-w-0">
+                                            <p class="text-base font-black text-white uppercase tracking-tighter leading-none truncate"
+                                                x-text="p.name"></p>
+                                            <template x-if="index === 0">
+                                                <span
+                                                    class="flex-shrink-0 text-[8px] bg-yellow-500/20 text-yellow-500 px-2 py-0.5 rounded text-xs font-black uppercase tracking-widest">KING</span>
+                                            </template>
+                                            <template x-if="index === 1">
+                                                <span
+                                                    class="flex-shrink-0 text-[8px] bg-slate-400/20 text-slate-400 px-2 py-0.5 rounded text-xs font-black uppercase tracking-widest">ELITE</span>
+                                            </template>
+                                            <template x-if="index === 2">
+                                                <span
+                                                    class="flex-shrink-0 text-[8px] bg-amber-700/20 text-amber-700 px-2 py-0.5 rounded text-xs font-black uppercase tracking-widest">VETERAN</span>
+                                            </template>
+                                        </div>
+                                        <template x-if="p.isImposter">
+                                            <span
+                                                class="mt-2 inline-block text-[8px] text-red-500 font-black uppercase tracking-[0.3em] italic leading-none animate-pulse">STATUS:
+                                                EXPOSED</span>
+                                        </template>
+                                        <template x-if="!p.isImposter && winner === 'citizens'">
+                                            <span
+                                                class="mt-2 inline-block text-[8px] text-yellow-500 font-black uppercase tracking-[0.3em] italic leading-none">STATUS:
+                                                SECURED</span>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="text-3xl font-black text-white tabular-nums opacity-90 flex-shrink-0 pl-4 pr-1"
+                                    x-text="scores[p.peerID] || 0"></div>
+
+                                <!-- Decorative Highlight -->
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000">
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <div class="mt-12 flex flex-col md:flex-row gap-4">
+                    <button @click="returnToLobby()"
+                        class="btn-premium flex-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-800 py-5 md:py-6 rounded-[1.5rem] md:rounded-[2.5rem] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-white shadow-xl text-sm md:text-base hover:scale-[1.02] active:scale-95 transition-all">
+                        Next Extraction
+                    </button>
+                    <button @click="location.reload()"
+                        class="btn-premium px-8 md:px-12 py-3 bg-red-600/10 border border-red-500/30 rounded-[2.5rem] font-black uppercase tracking-[0.2em] text-red-500/80 text-[11px] md:text-xs hover:bg-red-600/20 hover:text-red-400 transition-all shadow-lg shadow-red-900/10">
+                        Terminate Hub
+                    </button>
+                </div>
+            </div>
+    </template>
+
+    <div class="fixed bottom-10 left-1/2 -translate-x-1/2 px-8 py-4 glass border-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.5em] text-indigo-400 shadow-2xl z-50 transition-all duration-500 translate-y-20 opacity-0"
+        :class="toastActive ? 'toast-active' : ''">
+        Mission Link Copied to Terminal
+    </div>
     </div>
 
     <script>
@@ -864,6 +1083,7 @@
                 readyToChat: false, readyPlayers: [],
                 voteCounts: {}, winner: null, currentPair: [], myPeerID: '',
                 toastActive: false, urlRoomMatched: false,
+                isTransitioning: false,
                 scores: JSON.parse(localStorage.getItem('undercover_scores') || '{}'),
                 messages: [], chatInput: '', maxPlayers: 20, manualImposterLimit: 0,
                 errorState: { active: false, title: '', message: '' },
@@ -891,21 +1111,37 @@
                     ['Book', 'Magazine'], ['Newspaper', 'Journal'], ['Letter', 'Email'], ['Call', 'Text'], ['Music', 'Podcast'],
                     ['Game', 'Sport'], ['Tennis', 'Badminton'], ['Golf', 'Hockey'], ['Swim', 'Dive'], ['Run', 'Jump'],
                     ['Circle', 'Square'], ['Triangle', 'Oval'], ['Line', 'Dot'], ['Blue', 'Purple'], ['Green', 'Yellow'],
-                    ['Hot', 'Warm'], ['Cold', 'Cool'], ['Fast', 'Quick'], ['Slow', 'Steady'], ['Big', 'Large'],
-                    ['Small', 'Tiny'], ['New', 'Fresh'], ['Old', 'Ancient'], ['Good', 'Great'], ['Bad', 'Poor'],
-                    ['Light', 'Bright'], ['Dark', 'Dim'], ['Soft', 'Smooth'], ['Hard', 'Rough'], ['Sweet', 'Sour'],
-                    ['Bread', 'Toast'], ['Egg', 'Omelette'], ['Soup', 'Stew'], ['Salad', 'Sandwich'], ['Meat', 'Fish'],
-                    ['Rice', 'Pasta'], ['Noodle', 'Potato'], ['Onion', 'Garlic'], ['Carrot', 'Tomato'], ['Cucumber', 'Pickle'],
-                    ['Coke', 'Pepsi'], ['Sprite', '7Up'], ['Beer', 'Cider'], ['Vodka', 'Gin'], ['Whiskey', 'Rum'],
-                    ['Paris', 'Rome'], ['Tokyo', 'Osaka'], ['New York', 'Los Angeles'], ['Berlin', 'Munich'], ['Madrid', 'Barcelona'],
-                    ['Piano', 'Keyboard'], ['Drum', 'Bass'], ['Mic', 'Speaker'], ['Headphone', 'Earbud'], ['Record', 'CD'],
-                    // Malayalam-themed Categories
+                    // Malayalam Categories (Expanded)
                     ['Sadhya', 'Biryani'], ['Premam', 'Hridayam'], ['Drishyam', 'Memories'], ['Lucifer', 'Bheeshma Parvam'],
                     ['Mammootty', 'Mohanlal'], ['Mundu', 'Lungi'], ['Puttu', 'Appam'], ['Onam', 'Vishu'],
                     ['Kathakali', 'Mohiniyattam'], ['Kochi', 'Trivandrum'], ['Manichithrathazhu', 'Bhargavi Nilayam'],
                     ['Aavesham', 'Romancham'], ['Bangalore Days', 'Ustad Hotel'], ['Kumbalangi Nights', 'Maheshinte Prathikaram'],
-                    ['Minnal Murali', 'Guru'], ['Manjummel Boys', '2018']
+                    ['Minnal Murali', 'Guru'], ['Manjummel Boys', '2018'],
+                    ['Idiyappam', 'Palappam'], ['Puttu', 'Kadala Curry'], ['Appam', 'Stew'], ['Pathiri', 'Chicken Curry'],
+                    ['Pazham Pori', 'Sukhiyan'], ['Neyyappam', 'Unniyappam'], ['Achappam', 'Kuzhalappam'], ['Boli', 'Palpayasam'],
+                    ['Banana Chips', 'Sarkara Varatti'], ['Dasan', 'Vijayan'], ['Anjooran', 'Raghavan Nair'], ['Pavanayi', 'Major Nair'],
+                    ['Shibu', 'Minnal Murali'], ['Georgekutty', 'IG Geetha'], ['Jayan', 'Prem Nazir'], ['Sukumaran', 'Soman'],
+                    ['Jagathy', 'Innocent'], ['KPAC Lalitha', 'Sukumarayi'], ['Shobana', 'Urvashi'], ['Athirappilly', 'Vazhachal'],
+                    ['Bekal Fort', 'Palakkad Fort'], ['Guruvayur', 'Sabarimala'], ['Silent Valley', 'Eravikulam'],
+                    ['Kalaripayattu', 'Margamkali'], ['Oppana', 'Daffmuttu'], ['Chundan Vallam', 'Snake Boat'],
+                    ['Kerala Blasters', 'Manjappada'], ['Asianet', 'Mazhavil'], ['Fahadh Faasil', 'Suraj Venjaramoodu'],
+                    ['Tovino Thomas', 'Dulquer Salmaan'], ['Prithviraj', 'Indrajith'], ['Nivin Pauly', 'Asif Ali'],
+                    ['Nazriya', 'Manju Warrier'], ['Kappa', 'Meen Mulakithu'], ['Puttu', 'Appam'], ['Sambar', 'Rasam']
                 ],
+                getPlayerColor(name) {
+                    const colors = [
+                        'bg-indigo-600', 'bg-emerald-600', 'bg-rose-600', 'bg-amber-600',
+                        'bg-cyan-600', 'bg-fuchsia-600', 'bg-violet-600', 'bg-teal-600',
+                        'bg-orange-600', 'bg-pink-600', 'bg-lime-600', 'bg-sky-600',
+                        'bg-yellow-600', 'bg-purple-600', 'bg-slate-600', 'bg-red-600'
+                    ];
+                    let hash = 0;
+                    for (let i = 0; i < name.length; i++) {
+                        hash = ((hash << 5) - hash) + name.charCodeAt(i);
+                        hash |= 0;
+                    }
+                    return colors[Math.abs(hash) % colors.length];
+                },
                 initHub() {
                     const params = new URLSearchParams(window.location.search);
                     if (params.has('room')) {
@@ -919,6 +1155,9 @@
                         this.toastActive = true;
                         setTimeout(() => this.toastActive = false, 3000);
                     });
+                },
+                getSortedPlayers() {
+                    return this.roles.slice().sort((a, b) => (this.scores[b.peerID] || 0) - (this.scores[a.peerID] || 0));
                 },
                 createRoom() {
                     this.signaling = true; this.status = 'connecting';
@@ -1020,6 +1259,7 @@
                         this.manualImposterLimit = data.manualImposterLimit;
                     }
                     if (data.type === 'extension_vote_start') {
+                        this.isTransitioning = false;
                         this.step = 'extension_vote';
                         this.hasVotedExtension = false;
                         this.extensionVotes = { yes: 0, no: 0 };
@@ -1027,19 +1267,24 @@
                     if (data.type === 'extension_vote_sync') {
                         this.extensionVotes = data.votes;
                     }
+                    if (data.type === 'round_transition') { this.isTransitioning = true; }
                     if (data.type === 'game_start') {
+                        this.isTransitioning = false;
+                        this.extensionVotes = { yes: 0, no: 0 };
+                        this.hasVotedExtension = false;
                         this.roles = data.roles; this.myRole = this.roles.find(r => r.peerID === this.myPeerID); this.currentPair = data.pair;
                         this.wordVisible = false; this.readyToChat = false; this.clues = []; this.currentRound = 1; this.hasVoted = false; this.voteCounts = {};
                         this.step = 'reveal';
                     }
                     if (data.type === 'clue_broadcast') this.clues = data.clues;
                     if (data.type === 'turn_order') {
+                        this.isTransitioning = false;
                         this.step = 'active'; this.activePlayerIndex = data.idx; this.currentRound = data.round;
                         this.activePlayerName = this.roles[this.activePlayerIndex].name;
                         this.isMyTurn = (this.roles[this.activePlayerIndex].peerID === this.myPeerID);
                         this.startTimer();
                     }
-                    if (data.type === 'vote_init') { this.step = 'vote'; this.hasVoted = false; this.voteCounts = {}; this.showArchive = false; }
+                    if (data.type === 'vote_init') { this.isTransitioning = false; this.step = 'vote'; this.hasVoted = false; this.voteCounts = {}; this.showArchive = false; }
                     if (data.type === 'vote_sync') { this.voteCounts = data.voteCounts; }
                     if (data.type === 'result') {
                         this.winner = data.winner; this.currentPair = data.pair; this.scores = data.scores;
@@ -1072,7 +1317,7 @@
                         word: imposterIDs.includes(p.peerID) ? pair[1] : pair[0],
                         isImposter: imposterIDs.includes(p.peerID)
                     }));
-                    this.readyPlayers = []; this.voteCounts = {};
+                    this.readyPlayers = []; this.voteCounts = {}; this.extensionVotes = { yes: 0, no: 0 }; this.hasVotedExtension = false;
                     this.broadcast({ type: 'game_start', roles: this.roles, pair: pair });
                     this.handleClientData({ type: 'game_start', roles: this.roles, pair: pair });
                 },
@@ -1102,6 +1347,10 @@
                 hostRotateTurn() {
                     this.activePlayerIndex++;
                     if (this.activePlayerIndex >= this.players.length) {
+                        // Broadcast transition for all clients
+                        const transitionData = { type: 'round_transition' };
+                        this.broadcast(transitionData); this.handleClientData(transitionData);
+
                         // End of round: Delay 5 seconds for final review
                         setTimeout(() => {
                             this.activePlayerIndex = 0;
@@ -1147,6 +1396,8 @@
                     }
                 },
                 submitClue() {
+                    if (!this.isMyTurn) return;
+                    this.isMyTurn = false;
                     clearInterval(this.timerInterval);
                     const text = this.clueInput || 'RADIO SILENCE';
                     const data = { type: 'clue_entry', name: this.playerName, text: text };
