@@ -104,6 +104,90 @@
             transform: translateY(0);
             opacity: 1;
         }
+
+        @keyframes winner-glimmer {
+            0% {
+                box-shadow: 0 0 0 rgba(234, 179, 8, 0);
+            }
+
+            50% {
+                box-shadow: 0 0 30px rgba(234, 179, 8, 0.4);
+            }
+
+            100% {
+                box-shadow: 0 0 0 rgba(234, 179, 8, 0);
+            }
+        }
+
+        @keyframes imposter-flicker {
+
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(239, 68, 68, 0.6);
+                transform: scale(1.02);
+            }
+
+            70% {
+                transform: translateX(2px);
+            }
+
+            80% {
+                transform: translateX(-2px);
+            }
+        }
+
+        @keyframes header-punch {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+                filter: blur(10px);
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+                filter: blur(0);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animate-winner {
+            animation: winner-glimmer 2s infinite ease-in-out;
+        }
+
+        .animate-imposter {
+            animation: imposter-flicker 1.5s infinite ease-in-out;
+        }
+
+        .animate-header-reveal {
+            animation: header-punch 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes turn-pulse-glow {
+
+            0%,
+            100% {
+                border-color: rgba(99, 102, 241, 0.2);
+                box-shadow: 0 0 10px rgba(99, 102, 241, 0.1);
+            }
+
+            50% {
+                border-color: rgba(99, 102, 241, 0.6);
+                box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+            }
+        }
+
+        .animate-turn-glow {
+            animation: turn-pulse-glow 2s infinite ease-in-out;
+        }
     </style>
 </head>
 
@@ -144,6 +228,18 @@
                             <p
                                 class="mt-4 text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed max-w-[200px] mx-auto">
                                 Create a secure frequency hub for deployment.</p>
+                        </div>
+                        <div class="mb-8 relative z-10 px-6">
+                            <p class="text-[9px] text-slate-600 font-black uppercase tracking-widest mb-3 text-center">
+                                Hub Capacity (Max Agents)</p>
+                            <div class="flex items-center justify-center space-x-6">
+                                <button @click="maxPlayers = Math.max(3, maxPlayers - 1)"
+                                    class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-white font-black flex items-center justify-center hover:bg-white/10 transition-all">-</button>
+                                <span class="text-3xl font-black text-purple-500 w-16 text-center tabular-nums"
+                                    x-text="maxPlayers"></span>
+                                <button @click="maxPlayers = Math.min(50, maxPlayers + 1)"
+                                    class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-white font-black flex items-center justify-center hover:bg-white/10 transition-all">+</button>
+                            </div>
                         </div>
                         <button @click="createRoom()" :disabled="!playerName || joinCode || signaling"
                             class="btn-premium w-full bg-gradient-to-br from-purple-600 to-indigo-800 p-7 rounded-3xl text-white font-black uppercase tracking-[0.5em] shadow-2xl disabled:opacity-20 text-base">
@@ -218,6 +314,45 @@
                     </div>
                 </div>
 
+                <!-- HOST CONFIGURATION -->
+                <template x-if="isHost">
+                    <div
+                        class="mb-8 p-6 glass-bright border border-white/5 rounded-[2rem] flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                        <div>
+                            <p
+                                class="text-[9px] text-indigo-400 font-black uppercase tracking-[0.3em] mb-1 opacity-70 italic">
+                                Protocol Adjustment</p>
+                            <h3 class="text-sm font-black text-white uppercase tracking-wider">Imposter Threat Level
+                            </h3>
+                        </div>
+                        <div
+                            class="flex items-center space-x-4 bg-black/20 p-2 rounded-2xl border border-white/5 shadow-inner">
+                            <button
+                                @click="manualImposterLimit = Math.max(0, manualImposterLimit - 1); broadcastConfig()"
+                                class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 text-white font-black flex items-center justify-center hover:bg-white/10">-</button>
+                            <div class="text-center px-4">
+                                <span class="text-xl font-black text-white leading-none block"
+                                    x-text="manualImposterLimit === 0 ? 'AUTO' : manualImposterLimit"></span>
+                                <p class="text-[7px] text-slate-500 font-bold uppercase tracking-widest mt-0.5"
+                                    x-text="manualImposterLimit === 0 ? 'SCALING' : 'FIXED'"></p>
+                            </div>
+                            <button
+                                @click="manualImposterLimit = Math.min(5, manualImposterLimit + 1); broadcastConfig()"
+                                class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 text-white font-black flex items-center justify-center hover:bg-white/10">+</button>
+                        </div>
+                    </div>
+                </template>
+                <template x-if="!isHost">
+                    <div
+                        class="mb-8 p-4 glass-bright border border-white/5 rounded-[1.5rem] flex items-center justify-center space-x-3 opacity-80">
+                        <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
+                        <p class="text-[9px] text-slate-500 font-black uppercase tracking-[0.4em]">Threat Level: <span
+                                class="text-indigo-400 ml-1"
+                                x-text="manualImposterLimit === 0 ? 'AUTO SCALING' : manualImposterLimit + ' FIXED IMPOSTERS'"></span>
+                        </p>
+                    </div>
+                </template>
+
                 <div
                     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-max overflow-y-auto mb-10 pr-2 custom-scrollbar max-h-[45vh]">
                     <template x-for="p in players" :key="p.peerID">
@@ -239,6 +374,40 @@
                             </template>
                         </div>
                     </template>
+                </div>
+
+                <!-- LOBBY CHAT -->
+                <div class="mb-10 pt-6 border-t border-white/5">
+                    <p class="text-[9px] text-indigo-400 font-black uppercase tracking-[0.4em] mb-4 opacity-70 italic">
+                        Hub Frequency Comms</p>
+                    <div class="h-40 glass-bright rounded-[1.5rem] p-5 overflow-y-auto custom-scrollbar space-y-3 mb-4"
+                        x-ref="lobbyChat"
+                        x-init="$watch('messages', () => { $nextTick(() => { $refs.lobbyChat.scrollTop = $refs.lobbyChat.scrollHeight; }) })">
+                        <template x-for="msg in messages">
+                            <div class="animate-in slide-in-from-left-1">
+                                <div class="flex items-baseline space-x-2">
+                                    <span class="text-[9px] font-black text-indigo-500 uppercase tracking-widest"
+                                        x-text="msg.name"></span>
+                                    <span class="text-[7px] text-slate-700 font-bold" x-text="msg.time"></span>
+                                </div>
+                                <p class="text-[11px] font-bold text-white/90 uppercase tracking-wide leading-tight mt-0.5"
+                                    x-text="msg.text"></p>
+                            </div>
+                        </template>
+                        <template x-if="messages.length === 0">
+                            <div class="h-full flex items-center justify-center opacity-20">
+                                <p class="text-[8px] text-slate-500 font-black uppercase tracking-[0.5em] italic">Secure
+                                    Line Established...</p>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="flex space-x-3">
+                        <input type="text" x-model="chatInput" @keydown.enter="sendChatMessage()"
+                            placeholder="Enter secure transmission..."
+                            class="flex-1 glass-bright p-4 rounded-2xl text-[10px] font-black focus:ring-1 focus:ring-indigo-500 outline-none uppercase tracking-widest placeholder:text-slate-800 text-white shadow-inner">
+                        <button @click="sendChatMessage()"
+                            class="px-6 bg-indigo-600/10 text-indigo-400 border border-indigo-500/30 rounded-2xl text-[9px] font-black uppercase tracking-[0.3em] hover:bg-indigo-600 hover:text-white transition-all shadow-lg active:scale-95">SEND</button>
+                    </div>
                 </div>
 
                 <template x-if="isHost">
@@ -325,8 +494,9 @@
 
         <!-- STEP: ACTIVE -->
         <template x-if="step === 'active'">
-            <div
-                class="glass p-10 rounded-[3rem] shadow-2xl h-[85vh] flex flex-col relative overflow-hidden border border-white/5">
+            <div class="glass p-8 rounded-[3rem] shadow-2xl h-[90vh] flex flex-col relative overflow-hidden transition-all duration-500"
+                :class="isMyTurn ? 'animate-turn-glow border-indigo-500/50' : 'border-white/5'">
+
                 <div class="absolute top-0 left-0 timer-bar" :class="timer < 10 ? 'pulse-red' : ''"
                     :style="'width: ' + (timer / 30 * 100) + '%'"></div>
                 <div class="flex justify-between items-start mb-8 px-2">
@@ -348,67 +518,238 @@
                             x-text="activePlayerName"></p>
                     </div>
                 </div>
-                <div id="chat-container" class="flex-1 overflow-y-auto mb-8 custom-scrollbar space-y-3 pr-2"
-                    x-init="$watch('clues', () => { $nextTick(() => { $el.scrollTop = $el.scrollHeight; }) })">
-                    <template x-for="c in clues">
-                        <div
-                            class="p-4 glass-bright border-white/5 rounded-[1.5rem] animate-in slide-in-from-left-2 transition-all">
-                            <div class="flex justify-between items-end mb-2 px-1">
-                                <span
-                                    class="text-[10px] font-black text-indigo-500/80 uppercase tracking-widest leading-none"
-                                    x-text="c.player"></span>
-                                <span class="text-[8px] text-slate-700 font-black uppercase tracking-widest italic"
-                                    x-text="'PHASE ' + c.round"></span>
+
+                <div x-data="{ showGeneralChat: false }" class="flex-1 flex flex-col min-h-0 relative">
+                    <!-- TABS -->
+                    <div class="flex-none flex space-x-2 mb-4">
+                        <button @click="showGeneralChat = false"
+                            :class="!showGeneralChat ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-500'"
+                            class="px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all">Mission
+                            Intel</button>
+                        <button @click="showGeneralChat = true"
+                            :class="showGeneralChat ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-500'"
+                            class="px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all relative">
+                            General Comms
+                            <span x-show="messages.length > 0 && showGeneralChat === false"
+                                class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-lg"></span>
+                        </button>
+                    </div>
+
+                    <!-- MISSION INTEL (Chat Feed) -->
+                    <div x-show="!showGeneralChat" x-ref="intelFeed"
+                        class="flex-1 overflow-y-auto mb-4 custom-scrollbar space-y-3 pr-2"
+                        x-init="$watch('clues', () => { $nextTick(() => { $refs.intelFeed.scrollTop = $refs.intelFeed.scrollHeight; }) })">
+                        <template x-for="c in clues">
+                            <div
+                                class="p-4 glass-bright border-white/5 rounded-[1.5rem] animate-in slide-in-from-left-2 transition-all">
+                                <div class="flex justify-between items-end mb-2 px-1">
+                                    <span
+                                        class="text-[10px] font-black text-indigo-500/80 uppercase tracking-widest leading-none"
+                                        x-text="c.player"></span>
+                                    <span class="text-[8px] text-slate-700 font-black uppercase tracking-widest italic"
+                                        x-text="'PHASE ' + c.round"></span>
+                                </div>
+                                <p class="text-white text-lg font-bold leading-tight uppercase tracking-tight"
+                                    x-text="c.text"></p>
                             </div>
-                            <p class="text-white text-lg font-bold leading-tight uppercase tracking-tight"
-                                x-text="c.text"></p>
+                        </template>
+                    </div>
+
+                    <!-- GENERAL CHAT -->
+                    <div x-show="showGeneralChat" class="flex-1 flex flex-col min-h-0">
+                        <div class="flex-1 overflow-y-auto mb-4 custom-scrollbar space-y-3 pr-2" x-ref="generalChatBox"
+                            x-init="$watch('messages', () => { $nextTick(() => { $refs.generalChatBox.scrollTop = $refs.generalChatBox.scrollHeight; }) })">
+                            <template x-for="msg in messages">
+                                <div
+                                    class="p-3 bg-white/5 rounded-xl border border-white/5 animate-in slide-in-from-bottom-1">
+                                    <div class="flex justify-between items-baseline mb-1">
+                                        <span class="text-[9px] font-black text-indigo-400 uppercase tracking-widest"
+                                            x-text="msg.name"></span>
+                                        <span class="text-[7px] text-slate-700 font-bold" x-text="msg.time"></span>
+                                    </div>
+                                    <p class="text-[10px] font-bold text-white/90 uppercase tracking-wider leading-relaxed"
+                                        x-text="msg.text"></p>
+                                </div>
+                            </template>
                         </div>
-                    </template>
+                        <div class="flex-none flex space-x-2">
+                            <input type="text" x-model="chatInput" @keydown.enter="sendChatMessage()"
+                                placeholder="General transmission..."
+                                class="flex-1 glass-bright p-4 rounded-xl text-[10px] font-black focus:ring-1 focus:ring-indigo-500 outline-none uppercase tracking-widest placeholder:text-slate-800 text-white">
+                            <button @click="sendChatMessage()"
+                                class="px-5 bg-indigo-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg active:scale-95">SEND</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="space-y-4 pt-6 border-t border-white/10">
+
+                <div class="flex-none space-y-4 pt-4 border-t border-white/10 mt-auto">
                     <div x-show="isMyTurn" class="animate-in slide-in-from-bottom-2">
+                        <div class="flex items-center justify-center mb-2">
+                            <span
+                                class="text-[8px] bg-indigo-600 text-white px-3 py-1 rounded-full font-black uppercase tracking-[0.3em] animate-pulse">Your
+                                Turn - Transmitting Intel</span>
+                        </div>
                         <div class="flex space-x-3">
-                            <input type="text" x-model="clueInput" placeholder="Enter intel clue..."
-                                class="flex-1 glass-bright p-5 rounded-[1.2rem] font-bold outline-none uppercase text-sm placeholder:text-slate-800 transition-all text-center tracking-widest input-glow">
+                            <input type="text" x-model="clueInput" @keydown.enter="submitClue()"
+                                placeholder="Enter intel clue..."
+                                class="flex-1 glass-bright p-5 rounded-[1.2rem] font-bold outline-none uppercase text-sm placeholder:text-slate-800 transition-all text-center tracking-widest input-glow border border-indigo-500/30">
                             <button @click="submitClue()" :disabled="!clueInput"
                                 class="px-8 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.2rem] font-black uppercase text-xs transition-all shadow-lg active:scale-95">SEND</button>
                         </div>
                         <p
-                            class="text-center text-[9px] text-indigo-400 font-black mt-4 uppercase tracking-[0.4em] opacity-80">
+                            class="text-center text-[9px] text-indigo-400 font-black mt-3 uppercase tracking-[0.4em] opacity-80">
                             Hub Signal Timeout: <span x-text="timer" class="text-white font-black text-lg px-1"></span>S
                         </p>
                     </div>
                     <div x-show="!isMyTurn"
-                        class="text-center p-8 bg-white/5 border border-white/5 rounded-[2rem] animate-pulse">
-                        <p
+                        class="text-center p-6 bg-white/5 border border-white/5 rounded-[2rem] animate-pulse">
+                        <p x-show="activePlayerIndex < players.length"
                             class="text-slate-600 font-black text-[10px] uppercase tracking-[0.5em] italic opacity-80 leading-none">
                             Awaiting Operative Frequency from <span x-text="activePlayerName"
                                 class="text-white px-1"></span>...</p>
+                        <p x-show="activePlayerIndex >= players.length"
+                            class="text-indigo-400 font-black text-[10px] uppercase tracking-[0.5em] italic opacity-80 leading-none">
+                            Phase Hub Synchronization in progress (5s)...</p>
                     </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- STEP: EXTENSION VOTE -->
+        <template x-if="step === 'extension_vote'">
+            <div
+                class="glass p-12 rounded-[4rem] text-center shadow-2xl animate-in slide-in-from-bottom-5 max-w-2xl w-full mx-auto border border-white/5">
+                <div class="mb-8 p-4 bg-indigo-500/10 rounded-full inline-block border border-indigo-500/20">
+                    <p class="text-[10px] text-indigo-400 font-black uppercase tracking-[0.5em] italic">Intelligence
+                        Protocol Deviation</p>
+                </div>
+                <h2 class="text-4xl font-black text-white uppercase tracking-tighter mb-4 italic">Request Additional
+                    Intel?</h2>
+                <p
+                    class="text-slate-400 text-xs font-bold uppercase tracking-widest leading-relaxed mb-10 max-w-sm mx-auto">
+                    Phase 2 has concluded. Should the hub request a third round of intel before identifying the breach?
+                </p>
+
+                <div class="flex flex-col space-y-4" x-show="!hasVotedExtension">
+                    <button @click="submitExtensionVote(true)"
+                        class="bg-indigo-600 hover:bg-indigo-500 text-white p-6 rounded-2xl font-black uppercase text-xs tracking-widest transition-all shadow-lg active:scale-95">
+                        Yes, Proceed to Phase 3
+                    </button>
+                    <button @click="submitExtensionVote(false)"
+                        class="bg-white/5 border border-white/10 hover:bg-white/10 text-slate-400 p-6 rounded-2xl font-black uppercase text-xs tracking-widest transition-all">
+                        No, Start Breach Voting
+                    </button>
+                </div>
+
+                <div x-show="hasVotedExtension">
+                    <div class="p-8 glass-bright rounded-[2.5rem] border border-white/5 animate-pulse">
+                        <p class="text-indigo-400 text-[10px] font-black uppercase tracking-[0.5em] mb-4">Awaiting
+                            Signal Quorum</p>
+                        <div class="flex justify-center space-x-2">
+                            <template x-for="i in 3">
+                                <div class="w-2 h-2 rounded-full bg-indigo-500"></div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Host Approval Phase (Only visible to Host) -->
+                    <template x-if="isHost && (extensionVotes.yes + extensionVotes.no >= players.length)">
+                        <div class="mt-8 pt-8 border-t border-white/10 animate-in fade-in zoom-in">
+                            <h3 class="text-xl font-black text-white uppercase tracking-tighter mb-6">Majority Decision:
+                                <span class="text-indigo-400"
+                                    x-text="extensionVotes.yes > extensionVotes.no ? 'EXTEND' : 'END'"></span>
+                            </h3>
+                            <div class="flex space-x-4">
+                                <button @click="decideExtension(true)"
+                                    class="flex-1 bg-green-600 hover:bg-green-500 text-white p-5 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg">APPROVE
+                                    PHASE 3</button>
+                                <button @click="decideExtension(false)"
+                                    class="flex-1 bg-red-600 hover:bg-red-500 text-white p-5 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg">DENY
+                                    EXTENSION</button>
+                            </div>
+                        </div>
+                    </template>
                 </div>
             </div>
         </template>
 
         <!-- STEP: VOTE -->
         <template x-if="step === 'vote'">
-            <div class="glass p-12 rounded-[4rem] text-center shadow-2xl animate-in slide-in-from-bottom-5">
-                <h2 class="text-4xl font-black text-white uppercase tracking-tighter mb-10 italic">IDENTIFY BREACH</h2>
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
-                    <template x-for="p in roles">
-                        <button @click="handleVoteClick(p.peerID)" :disabled="p.peerID === myPeerID || hasVoted"
-                            class="p-8 rounded-[2rem] glass-bright border border-white/10 hover:border-red-600/50 hover:scale-[1.03] transition-all font-black text-xl text-white shadow-xl flex flex-col items-center justify-center relative disabled:opacity-30 group">
-                            <span x-text="p.name" class="leading-none"></span>
-                            <span x-show="voteCounts && voteCounts[p.peerID]"
-                                class="absolute -top-3 -right-3 w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-xs font-black shadow-lg animate-bounce border-2 border-white/20"
-                                x-text="voteCounts[p.peerID]"></span>
-                        </button>
-                    </template>
+            <div
+                class="glass p-12 rounded-[4rem] text-center shadow-2xl animate-in slide-in-from-bottom-5 relative overflow-hidden">
+                <div class="absolute top-4 right-8">
+                    <button @click="showArchive = !showArchive"
+                        class="bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-widest hover:bg-indigo-600/40 transition-all">
+                        <span x-text="showArchive ? 'CLOSE ARCHIVE' : 'REVIEW INTEL ARCHIVE'"></span>
+                    </button>
                 </div>
-                <div class="mt-10 text-center" x-show="hasVoted">
-                    <p
-                        class="text-indigo-400 font-black text-[11px] uppercase tracking-[0.6em] animate-pulse italic opacity-80">
-                        Synchronizing Selection Quorum...</p>
+
+                <!-- INTEL ARCHIVE PANEL -->
+                <div x-show="showArchive" class="mb-10 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div
+                        class="p-6 bg-white/5 rounded-[2.5rem] border border-white/5 text-left max-h-[40vh] overflow-y-auto custom-scrollbar space-y-4">
+                        <div class="flex space-x-4 mb-4 border-b border-white/5 pb-2">
+                            <p class="text-[9px] text-white/40 font-black uppercase tracking-widest">Historical intel
+                                logs recovered</p>
+                        </div>
+                        <template x-for="c in clues">
+                            <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-[9px] font-black text-indigo-400 uppercase tracking-widest"
+                                        x-text="c.player"></span>
+                                    <span class="text-[7px] text-slate-600 uppercase"
+                                        x-text="'Phase ' + c.round"></span>
+                                </div>
+                                <p class="text-white text-xs font-bold uppercase tracking-wider" x-text="c.text"></p>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <div class="mb-10" x-show="!showArchive">
+                    <h2 class="text-4xl font-black text-white uppercase tracking-tighter italic">IDENTIFY BREACH</h2>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[50vh] overflow-y-auto p-8 custom-scrollbar">
+                        <template x-for="p in roles">
+                            <button @click="handleVoteClick(p.peerID)" :disabled="p.peerID === myPeerID || hasVoted"
+                                class="p-8 rounded-[2rem] glass-bright border border-white/10 hover:border-red-600/50 hover:scale-[1.03] transition-all font-black text-xl text-white shadow-xl flex flex-col items-center justify-center relative disabled:opacity-30 group">
+                                <span x-text="p.name" class="leading-none"></span>
+                                <span x-show="voteCounts && voteCounts[p.peerID]"
+                                    class="absolute -top-4 -right-4 w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-[11px] font-black shadow-[0_0_20px_rgba(220,38,38,0.4)] animate-bounce border-2 border-white/20 z-50 tabular-nums"
+                                    x-text="voteCounts[p.peerID]"></span>
+                            </button>
+                        </template>
+                    </div>
+                    <div class="mt-10 text-center" x-show="hasVoted">
+                        <p
+                            class="text-indigo-400 font-black text-[11px] uppercase tracking-[0.6em] animate-pulse italic opacity-80">
+                            Synchronizing Selection Quorum...</p>
+                    </div>
+                </div>
+        </template>
+
+        <!-- ERROR MODAL -->
+        <template x-if="errorState.active">
+            <div
+                class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
+                <div
+                    class="glass-bright p-10 rounded-[3rem] border border-red-500/30 max-w-md w-full text-center shadow-[0_0_50px_rgba(239,68,68,0.2)] animate-in zoom-in-95 duration-300">
+                    <div
+                        class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-500/20">
+                        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-black text-white uppercase tracking-tighter mb-2 italic"
+                        x-text="errorState.title"></h2>
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest leading-relaxed mb-8"
+                        x-text="errorState.message"></p>
+                    <button @click="errorState.active = false"
+                        class="w-full bg-red-600 hover:bg-red-500 text-white p-5 rounded-2xl font-black uppercase text-xs tracking-widest transition-all shadow-lg active:scale-95">
+                        Acknowledged
+                    </button>
                 </div>
             </div>
         </template>
@@ -416,53 +757,94 @@
         <!-- STEP: RESULT -->
         <template x-if="step === 'result'">
             <div
-                class="glass p-12 rounded-[4rem] text-center shadow-2xl relative overflow-hidden animate-in fade-in transition-all border border-white/5">
-                <h2 class="text-6xl font-black text-white mb-8 uppercase tracking-tighter leading-none"
-                    x-text="winner === 'citizens' ? 'SUCCESS' : 'FAILED'"></h2>
-                <div
-                    class="bg-indigo-950/10 border border-white/5 rounded-[3rem] p-8 mb-8 flex items-center justify-center shadow-inner">
-                    <div class="text-center px-10">
-                        <p
-                            class="text-[9px] text-slate-600 mb-3 font-black uppercase tracking-[0.4em] leading-none opacity-80">
-                            MISSION PAYLOAD</p>
-                        <p class="text-4xl font-black text-white uppercase tracking-tighter leading-none"
-                            x-text="currentPair[0]"></p>
-                    </div>
+                class="glass p-12 rounded-[4rem] text-center shadow-2xl relative overflow-hidden animate-in fade-in transition-all border border-white/5 max-w-4xl w-full mx-auto">
+
+                <div class="absolute top-8 right-12">
+                    <button @click="showArchive = !showArchive"
+                        class="bg-white/5 border border-white/10 text-slate-500 px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-widest hover:bg-white/10 transition-all">
+                        <span x-text="showArchive ? 'VIEW RANKS' : 'REVIEW ARCHIVE'"></span>
+                    </button>
                 </div>
-                <div class="glass p-8 rounded-[3.5rem] mb-10 border-white/5 relative overflow-hidden">
-                    <h3 class="text-[10px] text-slate-600 font-black uppercase tracking-[0.6em] mb-8 opacity-80">Hub
-                        Ranking Board</h3>
-                    <div
-                        class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[35vh] overflow-y-auto custom-scrollbar pr-2">
-                        <template x-for="p in roles">
-                            <div class="flex items-center justify-between p-4 bg-white/5 rounded-[1.5rem] border border-white/5 hover:bg-white/10 transition-all group"
-                                :class="p.isImposter ? 'border-red-500/60 shadow-red-glow' : ''">
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-800 flex items-center justify-center text-[10px] font-black text-white shadow-xl uppercase border border-white/5"
-                                        x-text="p.name[0]"></div>
-                                    <div class="text-left">
-                                        <p class="text-sm font-black text-white uppercase tracking-tighter leading-none truncate max-w-[100px]"
-                                            x-text="p.name"></p>
-                                        <span x-show="p.isImposter"
-                                            class="mt-1.5 inline-block text-[7px] text-red-500 font-black uppercase tracking-[0.4em] italic leading-none animate-pulse">STATUS:
-                                            EXPOSED</span>
+
+                <h2 class="text-6xl font-black text-white mb-4 uppercase tracking-tighter leading-none animate-header-reveal"
+                    x-text="winner === 'citizens' ? 'SUCCESS' : 'BREACH'"></h2>
+
+                <div x-show="showArchive"
+                    class="mb-8 p-6 bg-white/5 rounded-[2.5rem] text-left max-h-[35vh] overflow-y-auto custom-scrollbar space-y-3">
+                    <template x-for="c in clues">
+                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[9px] font-black text-indigo-400 uppercase" x-text="c.player"></span>
+                                <span class="text-[7px] text-slate-600 uppercase" x-text="'Phase ' + c.round"></span>
+                            </div>
+                            <p class="text-white text-xs font-bold uppercase" x-text="c.text"></p>
+                        </div>
+                    </template>
+                </div>
+
+                <div x-show="!showArchive">
+                    <div class="mb-10 animate-in fade-in zoom-in duration-700 delay-300">
+                        <p
+                            class="text-[10px] text-slate-500 font-black uppercase tracking-[0.5em] mb-3 opacity-60 italic">
+                            Mission Payload</p>
+                        <div
+                            class="bg-white/5 border border-white/5 rounded-[2rem] py-4 px-10 inline-block shadow-inner backdrop-blur-sm">
+                            <p class="text-4xl font-black text-white uppercase tracking-widest leading-none"
+                                x-text="currentPair[1]"></p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <p
+                            class="text-[10px] text-slate-500 font-black uppercase tracking-[0.6em] mb-6 opacity-60 italic">
+                            Hub Ranking Board</p>
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[40vh] overflow-y-auto custom-scrollbar p-6">
+                            <template x-for="p in roles">
+                                <div class="flex items-center justify-between p-6 bg-white/5 rounded-[2.5rem] border border-white/5 hover:bg-white/10 transition-all group relative overflow-hidden"
+                                    :class="p.isImposter ? 'animate-imposter border-red-500/40' : (winner === 'citizens' ? 'animate-winner border-yellow-500/30' : '')">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-white uppercase text-base shadow-xl border border-white/5"
+                                            :class="p.isImposter ? 'bg-red-600' : 'bg-indigo-600'" x-text="p.name[0]">
+                                        </div>
+                                        <div class="text-left">
+                                            <p class="text-base font-black text-white uppercase tracking-tighter leading-none"
+                                                x-text="p.name"></p>
+                                            <template x-if="p.isImposter">
+                                                <span
+                                                    class="mt-2 inline-block text-[8px] text-red-500 font-black uppercase tracking-[0.3em] italic leading-none animate-pulse">STATUS:
+                                                    EXPOSED</span>
+                                            </template>
+                                            <template x-if="!p.isImposter && winner === 'citizens'">
+                                                <span
+                                                    class="mt-2 inline-block text-[8px] text-yellow-500 font-black uppercase tracking-[0.3em] italic leading-none">STATUS:
+                                                    SECURED</span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-black text-white tabular-nums opacity-90 px-4"
+                                        x-text="scores[p.peerID] || 0"></div>
+
+                                    <!-- Decorative Highlight -->
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000">
                                     </div>
                                 </div>
-                                <span class="text-2xl font-black text-white leading-none px-3 opacity-90"
-                                    x-text="scores[p.peerID] || 0"></span>
-                            </div>
-                        </template>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 flex flex-col md:flex-row gap-4">
+                        <button @click="returnToLobby()"
+                            class="btn-premium flex-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-800 py-6 rounded-[2.5rem] font-black uppercase tracking-[0.4em] text-white shadow-xl text-base hover:scale-[1.02] active:scale-95 transition-all">
+                            Next Extraction
+                        </button>
+                        <button @click="location.reload()"
+                            class="btn-premium px-12 bg-white/5 border border-white/10 rounded-[2.5rem] font-black uppercase tracking-[0.3em] text-slate-600 text-[10px] hover:bg-white/10 hover:text-slate-400">
+                            Terminate Hub
+                        </button>
                     </div>
                 </div>
-                <div class="flex flex-col md:flex-row gap-4">
-                    <button @click="returnToLobby()"
-                        class="btn-premium flex-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-800 py-6 rounded-[2rem] font-black uppercase tracking-[0.4em] text-white shadow-xl text-base">Next
-                        Extraction</button>
-                    <button @click="location.reload()"
-                        class="btn-premium px-10 bg-white/5 border border-white/10 rounded-[2rem] font-black uppercase tracking-[0.3em] text-slate-600 text-[9px] hover:bg-white/10">Terminate
-                        Hub</button>
-                </div>
-            </div>
         </template>
 
         <div class="fixed bottom-10 left-1/2 -translate-x-1/2 px-8 py-4 glass border-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.5em] text-indigo-400 shadow-2xl z-50 transition-all duration-500 translate-y-20 opacity-0"
@@ -483,8 +865,12 @@
                 voteCounts: {}, winner: null, currentPair: [], myPeerID: '',
                 toastActive: false, urlRoomMatched: false,
                 scores: JSON.parse(localStorage.getItem('undercover_scores') || '{}'),
+                messages: [], chatInput: '', maxPlayers: 20, manualImposterLimit: 0,
+                errorState: { active: false, title: '', message: '' },
+                extensionVotes: { yes: 0, no: 0 }, hasVotedExtension: false,
+                showArchive: false,
                 wordPairs: [
-                    ['Coffee', 'Tea'], ['Lion', 'Tiger'], ['Pizza', 'Burger'], ['Sun', 'Moon'], ['Laptop', 'Desktop'], 
+                    ['Coffee', 'Tea'], ['Lion', 'Tiger'], ['Pizza', 'Burger'], ['Sun', 'Moon'], ['Laptop', 'Desktop'],
                     ['River', 'Mountain'], ['Sword', 'Shield'], ['Forest', 'Desert'], ['Paris', 'London'], ['Radio', 'Podcast'],
                     ['Airplane', 'Helicopter'], ['Bicycle', 'Motorcycle'], ['Camera', 'Phone'], ['Eagle', 'Falcon'], ['Violin', 'Cello'],
                     ['Actor', 'Director'], ['Doctor', 'Nurse'], ['Football', 'Rugby'], ['Movie', 'Series'], ['TikTok', 'Instagram'],
@@ -512,7 +898,13 @@
                     ['Rice', 'Pasta'], ['Noodle', 'Potato'], ['Onion', 'Garlic'], ['Carrot', 'Tomato'], ['Cucumber', 'Pickle'],
                     ['Coke', 'Pepsi'], ['Sprite', '7Up'], ['Beer', 'Cider'], ['Vodka', 'Gin'], ['Whiskey', 'Rum'],
                     ['Paris', 'Rome'], ['Tokyo', 'Osaka'], ['New York', 'Los Angeles'], ['Berlin', 'Munich'], ['Madrid', 'Barcelona'],
-                    ['Piano', 'Keyboard'], ['Drum', 'Bass'], ['Mic', 'Speaker'], ['Headphone', 'Earbud'], ['Record', 'CD']
+                    ['Piano', 'Keyboard'], ['Drum', 'Bass'], ['Mic', 'Speaker'], ['Headphone', 'Earbud'], ['Record', 'CD'],
+                    // Malayalam-themed Categories
+                    ['Sadhya', 'Biryani'], ['Premam', 'Hridayam'], ['Drishyam', 'Memories'], ['Lucifer', 'Bheeshma Parvam'],
+                    ['Mammootty', 'Mohanlal'], ['Mundu', 'Lungi'], ['Puttu', 'Appam'], ['Onam', 'Vishu'],
+                    ['Kathakali', 'Mohiniyattam'], ['Kochi', 'Trivandrum'], ['Manichithrathazhu', 'Bhargavi Nilayam'],
+                    ['Aavesham', 'Romancham'], ['Bangalore Days', 'Ustad Hotel'], ['Kumbalangi Nights', 'Maheshinte Prathikaram'],
+                    ['Minnal Murali', 'Guru'], ['Manjummel Boys', '2018']
                 ],
                 initHub() {
                     const params = new URLSearchParams(window.location.search);
@@ -539,7 +931,11 @@
                         conn.on('data', data => this.handleHostData(data, conn.peer));
                         conn.on('close', () => this.handleDisconnect(conn.peer));
                     });
-                    this.peer.on('error', err => { this.status = 'error'; this.signaling = false; alert('ID Frequency Overlap. Refresh Hub.'); });
+                    this.peer.on('error', err => {
+                        this.status = 'error';
+                        this.signaling = false;
+                        this.triggerError('FREQUENCY OVERLAP', 'ID Frequency overlap detected. Please refresh the Hub.');
+                    });
                 },
                 joinRoom() {
                     this.signaling = true; this.status = 'connecting';
@@ -551,15 +947,42 @@
                         this.conn = this.peer.connect('el-' + code, { metadata: { name: this.playerName } });
                         this.conn.on('open', () => { this.status = 'online'; this.signaling = false; this.sendToHost({ type: 'join', name: this.playerName }); this.step = 'lobby'; });
                         this.conn.on('data', data => this.handleClientData(data));
-                        this.conn.on('close', () => { this.step = 'landing'; alert('Sync Lost.'); });
+                        this.conn.on('close', () => {
+                            this.step = 'landing';
+                            this.triggerError('SYNC LOST', 'Connection to the hub lead was terminated.');
+                        });
                     });
+                },
+                sendChatMessage() {
+                    if (!this.chatInput.trim()) return;
+                    const data = { type: 'chat_message', name: this.playerName, text: this.chatInput.trim(), time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+                    this.isHost ? this.handleHostData(data, this.myPeerID) : this.sendToHost(data);
+                    this.chatInput = '';
                 },
                 handleHostData(data, fromID) {
                     if (data.type === 'join') {
+                        if (this.players.length >= this.maxPlayers) {
+                            const conn = this.connections[fromID];
+                            if (conn) { conn.send({ type: 'error', message: 'Hub is at Full Capacity.' }); setTimeout(() => conn.close(), 500); }
+                            return;
+                        }
                         if (!this.players.find(p => p.peerID === fromID)) {
                             this.players.push({ name: data.name, peerID: fromID });
                             this.broadcast({ type: 'players_update', players: this.players });
                         }
+                    }
+                    if (data.type === 'chat_message') {
+                        this.messages.push(data);
+                        this.broadcast({ type: 'chat_broadcast', messages: this.messages });
+                    }
+                    if (data.type === 'broadcast_config') {
+                        this.maxPlayers = data.maxPlayers;
+                        this.manualImposterLimit = data.manualImposterLimit;
+                        this.broadcast({ type: 'config_sync', maxPlayers: this.maxPlayers, manualImposterLimit: this.manualImposterLimit });
+                    }
+                    if (data.type === 'extension_vote_cast') {
+                        data.vote ? this.extensionVotes.yes++ : this.extensionVotes.no++;
+                        this.broadcast({ type: 'extension_vote_sync', votes: this.extensionVotes });
                     }
                     if (data.type === 'ready_check') {
                         if (!this.readyPlayers.includes(fromID)) {
@@ -581,7 +1004,29 @@
                 handleClientData(data) {
                     if (data.type === 'players_update') this.players = data.players;
                     if (data.type === 'return_to_lobby') this.step = 'lobby';
-                    if (data.type === 'kick') { this.conn.close(); this.step = 'landing'; alert('Manual Extraction Issued.'); }
+                    if (data.type === 'error') {
+                        this.peer.destroy();
+                        this.step = 'landing';
+                        this.triggerError('SIGNAL REFUSED', data.message);
+                    }
+                    if (data.type === 'kick') {
+                        this.conn.close();
+                        this.step = 'landing';
+                        this.triggerError('MANUAL EXTRACTION', 'You have been removed from the frequency by the hub lead.');
+                    }
+                    if (data.type === 'chat_broadcast') this.messages = data.messages;
+                    if (data.type === 'config_sync') {
+                        this.maxPlayers = data.maxPlayers;
+                        this.manualImposterLimit = data.manualImposterLimit;
+                    }
+                    if (data.type === 'extension_vote_start') {
+                        this.step = 'extension_vote';
+                        this.hasVotedExtension = false;
+                        this.extensionVotes = { yes: 0, no: 0 };
+                    }
+                    if (data.type === 'extension_vote_sync') {
+                        this.extensionVotes = data.votes;
+                    }
                     if (data.type === 'game_start') {
                         this.roles = data.roles; this.myRole = this.roles.find(r => r.peerID === this.myPeerID); this.currentPair = data.pair;
                         this.wordVisible = false; this.readyToChat = false; this.clues = []; this.currentRound = 1; this.hasVoted = false; this.voteCounts = {};
@@ -594,26 +1039,38 @@
                         this.isMyTurn = (this.roles[this.activePlayerIndex].peerID === this.myPeerID);
                         this.startTimer();
                     }
-                    if (data.type === 'vote_init') { this.step = 'vote'; this.hasVoted = false; this.voteCounts = {}; }
+                    if (data.type === 'vote_init') { this.step = 'vote'; this.hasVoted = false; this.voteCounts = {}; this.showArchive = false; }
                     if (data.type === 'vote_sync') { this.voteCounts = data.voteCounts; }
                     if (data.type === 'result') {
                         this.winner = data.winner; this.currentPair = data.pair; this.scores = data.scores;
                         localStorage.setItem('undercover_scores', JSON.stringify(this.scores));
-                        this.step = 'result';
+                        this.step = 'result'; this.showArchive = false;
                     }
                 },
                 hostStartGame() {
                     const pair = this.wordPairs[Math.floor(Math.random() * this.wordPairs.length)];
                     this.currentPair = pair;
-                    const tempPlayers = [...this.players];
-                    this.shuffle(tempPlayers);
-                    const imposterIdx = Math.floor(Math.random() * tempPlayers.length);
-                    const imposterPeerID = tempPlayers[imposterIdx].peerID;
-                    this.roles = this.players.map(p => ({
+                    const gamePlayers = [...this.players];
+                    this.shuffle(gamePlayers);
+
+                    // Dynamic vs Manual Imposters
+                    let imposterCount = gamePlayers.length >= 9 ? 3 : (gamePlayers.length >= 6 ? 2 : 1);
+                    if (this.manualImposterLimit > 0) {
+                        imposterCount = Math.min(this.manualImposterLimit, gamePlayers.length - 2);
+                        if (imposterCount < 1) imposterCount = 1;
+                    }
+
+                    // Random Roles (Imposter can be anywhere)
+                    const potentialImposters = [...gamePlayers];
+                    this.shuffle(potentialImposters);
+                    const imposterIDs = potentialImposters.slice(0, imposterCount).map(p => p.peerID);
+
+                    // Map roles from the SHUFFLED list (gamePlayers) to randomize turn order
+                    this.roles = gamePlayers.map(p => ({
                         peerID: p.peerID,
                         name: p.name,
-                        word: (p.peerID === imposterPeerID) ? pair[1] : pair[0],
-                        isImposter: p.peerID === imposterPeerID
+                        word: imposterIDs.includes(p.peerID) ? pair[1] : pair[0],
+                        isImposter: imposterIDs.includes(p.peerID)
                     }));
                     this.readyPlayers = []; this.voteCounts = {};
                     this.broadcast({ type: 'game_start', roles: this.roles, pair: pair });
@@ -645,15 +1102,39 @@
                 hostRotateTurn() {
                     this.activePlayerIndex++;
                     if (this.activePlayerIndex >= this.players.length) {
-                        this.activePlayerIndex = 0;
-                        this.currentRound++;
-                        if (this.currentRound > 2) {
-                            this.broadcast({ type: 'vote_init' });
-                            this.handleClientData({ type: 'vote_init' });
-                            return;
-                        }
+                        // End of round: Delay 5 seconds for final review
+                        setTimeout(() => {
+                            this.activePlayerIndex = 0;
+                            this.currentRound++;
+                            if (this.currentRound === 3) {
+                                this.step = 'extension_vote';
+                                this.broadcast({ type: 'extension_vote_start' });
+                                return;
+                            }
+                            if (this.currentRound > 3) {
+                                this.broadcast({ type: 'vote_init' });
+                                this.handleClientData({ type: 'vote_init' });
+                                return;
+                            }
+                            this.broadcastTurnOrder();
+                        }, 5000);
+                        return;
                     }
                     this.broadcastTurnOrder();
+                },
+                submitExtensionVote(vote) {
+                    this.hasVotedExtension = true;
+                    const data = { type: 'extension_vote_cast', vote: vote };
+                    this.isHost ? this.handleHostData(data, this.myPeerID) : this.sendToHost(data);
+                },
+                decideExtension(approved) {
+                    if (approved) {
+                        this.broadcastTurnOrder();
+                    } else {
+                        const data = { type: 'vote_init' };
+                        this.broadcast(data);
+                        this.handleClientData(data);
+                    }
                 },
                 startTimer() {
                     clearInterval(this.timerInterval); this.timer = 15 + Math.floor(Math.random() * 20);
@@ -686,6 +1167,13 @@
                     this.broadcast(finalData); this.handleClientData(finalData);
                 },
                 sendToHost(data) { if (this.conn) this.conn.send(data); },
+                triggerError(title, message) {
+                    this.errorState = { active: true, title: title, message: message };
+                },
+                broadcastConfig() {
+                    const data = { type: 'broadcast_config', maxPlayers: this.maxPlayers, manualImposterLimit: this.manualImposterLimit };
+                    this.isHost ? this.handleHostData(data, this.myPeerID) : this.sendToHost(data);
+                },
                 broadcast(data) { Object.values(this.connections).forEach(c => c.send(data)); },
                 shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; } }
             }
