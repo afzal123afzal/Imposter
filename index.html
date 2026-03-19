@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMPOSTER GAME | Tactical Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --neon-purple: #9945FF;
+            --neon-cyan: #14F195;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #05050a;
+            background-image: radial-gradient(circle at 50% 50%, rgba(20, 20, 45, 0.96) 0%, rgba(5, 5, 10, 1) 100%),
+                url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=2070');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .space-header {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .glass {
+            background: rgba(15, 15, 30, 0.9);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-bright {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .neon-glow-purple {
+            box-shadow: 0 0 30px rgba(153, 69, 255, 0.1);
+        }
+
+        .neon-glow-cyan {
+            box-shadow: 0 0 30px rgba(20, 241, 149, 0.1);
+        }
+
+        .input-glow-purple:focus {
+            border-color: #9945FF;
+            box-shadow: 0 0 20px rgba(153, 69, 255, 0.2);
+        }
+
+        .input-glow-emerald:focus {
+            border-color: #14F195;
+            box-shadow: 0 0 20px rgba(20, 241, 149, 0.2);
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .timer-bar {
+            height: 3px;
+            background: linear-gradient(to right, #9945FF, #14F195);
+            transition: width 1s linear;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+
+        .btn-premium {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.2);
+        }
+
+        .btn-premium:active {
+            transform: translateY(0);
+            scale: 0.98;
+        }
+
+        .shadow-red-glow {
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.25);
+        }
+
+        .toast-active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4 selection:bg-purple-500/30">
+
+    <div x-data="protocolApp()" x-init="initHub()" x-cloak class="w-full max-w-5xl relative z-10">
+
+        <!-- STEP: LANDING -->
+        <template x-if="step === 'landing'">
+            <div class="animate-in fade-in zoom-in duration-500">
+                <div class="text-center mb-10">
+                    <h1
+                        class="space-header text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-indigo-400 to-emerald-400 leading-none py-1">
+                        IMPOSTER GAME !!!</h1>
+                    <p
+                        class="text-[10px] font-black uppercase tracking-[0.8em] text-slate-600 mt-2 opacity-80 leading-none italic">
+                        Synchronized Neural Frequency Hub</p>
+                </div>
+
+                <div class="max-w-md mx-auto mb-10 group relative">
+                    <input type="text" x-model="playerName" placeholder="Agent Name Please"
+                        class="w-full glass-bright p-6 rounded-3xl text-center font-black focus:ring-1 focus:ring-purple-500 outline-none uppercase tracking-widest placeholder:text-slate-800 text-xl input-glow-purple transition-all shadow-inner">
+                    <div
+                        class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-purple-600 text-[9px] font-bold uppercase tracking-widest rounded-lg text-white shadow-xl z-20">
+                        Your Name Please</div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                    <div
+                        class="glass p-10 rounded-[3rem] border-white/5 flex flex-col justify-between neon-glow-purple group transition-all hover:bg-white/5 relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-600/10 blur-3xl rounded-full"></div>
+                        <div class="mb-10 text-center relative z-10">
+                            <p
+                                class="text-[9px] text-purple-400 font-black uppercase tracking-[0.5em] mb-3 opacity-80 italic">
+                                Command Authorization</p>
+                            <h2 class="text-4xl font-black text-white uppercase tracking-tighter leading-none">
+                                INITIALIZE HOST</h2>
+                            <p
+                                class="mt-4 text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed max-w-[200px] mx-auto">
+                                Create a secure frequency hub for deployment.</p>
+                        </div>
+                        <button @click="createRoom()" :disabled="!playerName || joinCode || signaling"
+                            class="btn-premium w-full bg-gradient-to-br from-purple-600 to-indigo-800 p-7 rounded-3xl text-white font-black uppercase tracking-[0.5em] shadow-2xl disabled:opacity-20 text-base">
+                            <span x-text="signaling ? 'SYNCING...' : 'DEPLOY HUB'"></span>
+                        </button>
+                    </div>
+                    <div
+                        class="glass p-10 rounded-[3rem] border-white/5 flex flex-col justify-between neon-glow-cyan border-emerald-500/10 group transition-all hover:bg-white/5 relative overflow-hidden">
+                        <div class="absolute -top-10 -left-10 w-32 h-32 bg-emerald-600/10 blur-3xl rounded-full"></div>
+                        <div class="mb-10 text-center relative z-10">
+                            <p
+                                class="text-[9px] text-emerald-400 font-black uppercase tracking-[0.5em] mb-3 opacity-80 italic">
+                                Signal Bridge Reception</p>
+                            <h2 class="text-4xl font-black text-white uppercase tracking-tighter leading-none">CONNECT
+                                BRIDGE</h2>
+                            <p
+                                class="mt-4 text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed max-w-[200px] mx-auto">
+                                Input the 4-Letter Mission ID to join.</p>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="relative">
+                                <input type="text" x-model="joinCode" placeholder="MISSION ID"
+                                    class="w-full bg-black/50 border border-white/5 p-5 rounded-2xl text-center font-black focus:ring-1 focus:ring-emerald-500 outline-none uppercase tracking-[0.5em] placeholder:text-slate-900 text-lg input-glow-emerald transition-all shadow-inner">
+                                <template x-if="urlRoomMatched">
+                                    <div
+                                        class="absolute -top-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-emerald-600 text-[7px] font-black uppercase tracking-widest rounded text-white shadow-xl animate-bounce">
+                                        SIGNAL DETECTED</div>
+                                </template>
+                            </div>
+                            <button @click="joinRoom()" :disabled="!playerName || !joinCode || signaling"
+                                class="btn-premium w-full p-6 bg-emerald-600/10 hover:bg-emerald-600/20 border border-emerald-500/30 rounded-2xl text-emerald-400 font-black uppercase tracking-[0.5em] disabled:opacity-5 text-sm">
+                                ESTABLISH BRIDGE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="status !== 'offline'"
+                    class="mt-14 flex items-center justify-center space-x-3 px-6 py-2 glass rounded-full w-max mx-auto border-white/5 shadow-xl">
+                    <div class="w-2 h-2 rounded-full"
+                        :class="status === 'online' ? 'bg-emerald-500 shadow-[0_0_10px_#14f195]' : (status === 'error' ? 'bg-red-500' : 'bg-slate-700 animate-pulse')">
+                    </div>
+                    <span class="text-[8px] font-black uppercase tracking-[0.4em] text-slate-700"
+                        x-text="'Satellite Status: ' + status.toUpperCase()"></span>
+                </div>
+            </div>
+        </template>
+
+        <!-- STEP: LOBBY -->
+        <template x-if="step === 'lobby'">
+            <div
+                class="glass p-8 rounded-[3rem] animate-in slide-in-from-bottom-5 duration-500 shadow-2xl relative overflow-hidden">
+                <div class="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
+                    <div>
+                        <h2 class="space-header text-3xl font-black text-white leading-none uppercase tracking-tighter">
+                            TACTICAL HUB</h2>
+                        <p
+                            class="text-[9px] text-indigo-400 font-black uppercase tracking-[0.3em] mt-2 opacity-70 italic">
+                            Operative Fleet Synched</p>
+                    </div>
+                    <div class="flex flex-col items-end space-y-3">
+                        <div
+                            class="bg-black/30 p-4 rounded-[1.5rem] text-center shadow-inner border border-white/5 min-w-[120px]">
+                            <p class="text-[8px] text-slate-500 uppercase font-black mb-1 tracking-widest leading-none">
+                                ID CODE</p>
+                            <p class="text-3xl font-black text-white tracking-[0.2em] leading-none" x-text="roomID"></p>
+                        </div>
+                        <button @click="copyLink()"
+                            class="btn-premium px-6 py-2 bg-indigo-500/10 border border-indigo-500/30 rounded-full text-[8px] font-black uppercase tracking-widest text-indigo-400 hover:bg-indigo-500/20">
+                            🔗 Copy Mission Link
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-max overflow-y-auto mb-10 pr-2 custom-scrollbar max-h-[45vh]">
+                    <template x-for="p in players" :key="p.peerID">
+                        <div
+                            class="p-4 glass-bright border-white/5 rounded-2xl flex items-center justify-between group transition-all">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-800 flex items-center justify-center text-[10px] font-black text-white shadow-lg uppercase"
+                                    x-text="p.name[0]"></div>
+                                <div>
+                                    <p class="font-black text-white text-xs uppercase truncate max-w-[80px]"
+                                        x-text="p.name"></p>
+                                    <p class="text-[7px] text-slate-600 font-black uppercase tracking-widest mt-0.5 opacity-70"
+                                        x-text="p.peerID === myPeerID ? 'UNIT: SELF' : 'UNIT: AGENT'"></p>
+                                </div>
+                            </div>
+                            <template x-if="isHost && p.peerID !== myPeerID">
+                                <button @click="kickPlayer(p.peerID)"
+                                    class="w-6 h-6 bg-red-600/10 text-red-500 border border-red-500/20 rounded-lg hover:bg-red-600 hover:text-white transition-all flex items-center justify-center text-[10px] font-black">×</button>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+
+                <template x-if="isHost">
+                    <button @click="hostStartGame()" :disabled="players.length < 3"
+                        class="btn-premium w-full bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-800 py-6 rounded-[2rem] text-white font-black uppercase tracking-[0.5em] shadow-xl disabled:opacity-20 text-base">
+                        Deploy Final Protocol
+                    </button>
+                </template>
+                <template x-if="!isHost">
+                    <div class="text-center p-10 bg-white/5 rounded-[2.5rem] border border-white/5 animate-pulse">
+                        <p
+                            class="text-indigo-400 font-black text-[10px] uppercase tracking-[0.5em] italic opacity-80 leading-none">
+                            Awaiting Deployment Auth Hub...</p>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- STEP: REVEAL (RESTORED TACTICAL LOADER) -->
+        <template x-if="step === 'reveal'">
+            <div
+                class="glass p-10 rounded-[3.5rem] text-center shadow-2xl animate-in zoom-in duration-500 relative overflow-hidden">
+                <div class="mb-8">
+                    <p class="text-[10px] text-indigo-400 font-black uppercase tracking-[0.4em] mb-2 opacity-70">
+                        Identity Authentication</p>
+                    <h2 class="text-5xl font-black text-white uppercase tracking-tighter leading-none"
+                        x-text="playerName"></h2>
+                </div>
+
+                <div x-show="!readyToChat" class="max-w-md mx-auto">
+                    <div class="w-full h-72 glass-bright border-2 border-dashed border-indigo-500/20 rounded-[2.5rem] flex flex-col items-center justify-center cursor-pointer group hover:bg-white/5 transition-all relative overflow-hidden"
+                        @click="wordVisible = true">
+                        <div x-show="!wordVisible" class="text-center">
+                            <div
+                                class="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/5 animate-pulse shadow-inner text-indigo-400">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <p class="text-[10px] text-indigo-400 font-black uppercase tracking-[0.5em]">Authorize
+                                Reveal</p>
+                        </div>
+                        <div x-show="wordVisible" class="animate-in slide-in-from-top-4 duration-500 text-center px-10">
+                            <template x-if="myRole && myRole.isImposter">
+                                <div class="mb-8">
+                                    <span
+                                        class="px-5 py-2 bg-red-600/20 border border-red-500 text-red-500 text-[10px] font-black uppercase tracking-[0.4em] rounded-full shadow-lg animate-pulse">INFILTRATOR
+                                        DETECTED</span>
+                                    <p
+                                        class="mt-4 text-white/50 text-[9px] font-black uppercase tracking-widest leading-none italic">
+                                        Neutralize. Blend in.</p>
+                                </div>
+                            </template>
+                            <template x-if="myRole && !myRole.isImposter">
+                                <p
+                                    class="text-[10px] text-indigo-400 uppercase font-black mb-6 tracking-[0.4em] leading-none italic opacity-80">
+                                    Payload Protocol Intel</p>
+                            </template>
+                            <p class="text-7xl font-black text-white uppercase tracking-tighter leading-none"
+                                x-text="myRole && myRole.isImposter ? 'IMPOSTER' : (myRole ? myRole.word : 'ERROR')">
+                            </p>
+                        </div>
+                    </div>
+                    <button @click="markReady()"
+                        class="btn-premium w-full mt-8 py-6 rounded-[2rem] bg-white text-slate-950 font-black uppercase tracking-[0.4em] transition-all hover:bg-slate-200 shadow-xl"
+                        :disabled="!wordVisible" :class="!wordVisible ? 'opacity-0' : 'opacity-100'">Acknowledge
+                        Intel</button>
+                </div>
+
+                <div x-show="readyToChat" class="text-center animate-in fade-in py-16 px-6">
+                    <!-- RESTORED: Tactial Rounded-Square Loader -->
+                    <div
+                        class="w-20 h-20 border-t-4 border-emerald-500 border-4 border-white/5 rounded-[2rem] animate-spin mx-auto mb-8 shadow-[0_0_20px_rgba(20,241,149,0.2)]">
+                    </div>
+                    <p class="text-white font-black text-xl uppercase tracking-[0.3em] leading-none mb-4">Syncing
+                        Fleet...</p>
+                    <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.5em] italic opacity-80">
+                        Merging Operative Frequencies...</p>
+                </div>
+            </div>
+        </template>
+
+        <!-- STEP: ACTIVE -->
+        <template x-if="step === 'active'">
+            <div
+                class="glass p-10 rounded-[3rem] shadow-2xl h-[85vh] flex flex-col relative overflow-hidden border border-white/5">
+                <div class="absolute top-0 left-0 timer-bar" :class="timer < 10 ? 'pulse-red' : ''"
+                    :style="'width: ' + (timer / 30 * 100) + '%'"></div>
+                <div class="flex justify-between items-start mb-8 px-2">
+                    <div>
+                        <h2
+                            class="text-3xl font-black text-white space-header uppercase leading-none tracking-tighter italic opacity-90">
+                            MISSION FEED</h2>
+                        <div class="flex items-center mt-4">
+                            <span
+                                class="text-[9px] text-purple-400 font-black uppercase tracking-[0.2em] px-4 py-2 bg-purple-500/10 rounded-full border border-purple-500/20">Phase
+                                <span x-text="currentRound"></span> / 2</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p
+                            class="text-[9px] text-slate-600 uppercase font-black tracking-widest mb-1 italic leading-none opacity-80">
+                            HUB LEAD</p>
+                        <p class="text-2xl font-black text-indigo-400 uppercase leading-none tracking-tighter"
+                            x-text="activePlayerName"></p>
+                    </div>
+                </div>
+                <div id="chat-container" class="flex-1 overflow-y-auto mb-8 custom-scrollbar space-y-3 pr-2"
+                    x-init="$watch('clues', () => { $nextTick(() => { $el.scrollTop = $el.scrollHeight; }) })">
+                    <template x-for="c in clues">
+                        <div
+                            class="p-4 glass-bright border-white/5 rounded-[1.5rem] animate-in slide-in-from-left-2 transition-all">
+                            <div class="flex justify-between items-end mb-2 px-1">
+                                <span
+                                    class="text-[10px] font-black text-indigo-500/80 uppercase tracking-widest leading-none"
+                                    x-text="c.player"></span>
+                                <span class="text-[8px] text-slate-700 font-black uppercase tracking-widest italic"
+                                    x-text="'PHASE ' + c.round"></span>
+                            </div>
+                            <p class="text-white text-lg font-bold leading-tight uppercase tracking-tight"
+                                x-text="c.text"></p>
+                        </div>
+                    </template>
+                </div>
+                <div class="space-y-4 pt-6 border-t border-white/10">
+                    <div x-show="isMyTurn" class="animate-in slide-in-from-bottom-2">
+                        <div class="flex space-x-3">
+                            <input type="text" x-model="clueInput" placeholder="Enter intel clue..."
+                                class="flex-1 glass-bright p-5 rounded-[1.2rem] font-bold outline-none uppercase text-sm placeholder:text-slate-800 transition-all text-center tracking-widest input-glow">
+                            <button @click="submitClue()" :disabled="!clueInput"
+                                class="px-8 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[1.2rem] font-black uppercase text-xs transition-all shadow-lg active:scale-95">SEND</button>
+                        </div>
+                        <p
+                            class="text-center text-[9px] text-indigo-400 font-black mt-4 uppercase tracking-[0.4em] opacity-80">
+                            Hub Signal Timeout: <span x-text="timer" class="text-white font-black text-lg px-1"></span>S
+                        </p>
+                    </div>
+                    <div x-show="!isMyTurn"
+                        class="text-center p-8 bg-white/5 border border-white/5 rounded-[2rem] animate-pulse">
+                        <p
+                            class="text-slate-600 font-black text-[10px] uppercase tracking-[0.5em] italic opacity-80 leading-none">
+                            Awaiting Operative Frequency from <span x-text="activePlayerName"
+                                class="text-white px-1"></span>...</p>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- STEP: VOTE -->
+        <template x-if="step === 'vote'">
+            <div class="glass p-12 rounded-[4rem] text-center shadow-2xl animate-in slide-in-from-bottom-5">
+                <h2 class="text-4xl font-black text-white uppercase tracking-tighter mb-10 italic">IDENTIFY BREACH</h2>
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
+                    <template x-for="p in roles">
+                        <button @click="handleVoteClick(p.peerID)" :disabled="p.peerID === myPeerID || hasVoted"
+                            class="p-8 rounded-[2rem] glass-bright border border-white/10 hover:border-red-600/50 hover:scale-[1.03] transition-all font-black text-xl text-white shadow-xl flex flex-col items-center justify-center relative disabled:opacity-30 group">
+                            <span x-text="p.name" class="leading-none"></span>
+                            <span x-show="voteCounts && voteCounts[p.peerID]"
+                                class="absolute -top-3 -right-3 w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-xs font-black shadow-lg animate-bounce border-2 border-white/20"
+                                x-text="voteCounts[p.peerID]"></span>
+                        </button>
+                    </template>
+                </div>
+                <div class="mt-10 text-center" x-show="hasVoted">
+                    <p
+                        class="text-indigo-400 font-black text-[11px] uppercase tracking-[0.6em] animate-pulse italic opacity-80">
+                        Synchronizing Selection Quorum...</p>
+                </div>
+            </div>
+        </template>
+
+        <!-- STEP: RESULT -->
+        <template x-if="step === 'result'">
+            <div
+                class="glass p-12 rounded-[4rem] text-center shadow-2xl relative overflow-hidden animate-in fade-in transition-all border border-white/5">
+                <h2 class="text-6xl font-black text-white mb-8 uppercase tracking-tighter leading-none"
+                    x-text="winner === 'citizens' ? 'SUCCESS' : 'FAILED'"></h2>
+                <div
+                    class="bg-indigo-950/10 border border-white/5 rounded-[3rem] p-8 mb-8 flex items-center justify-center shadow-inner">
+                    <div class="text-center px-10">
+                        <p
+                            class="text-[9px] text-slate-600 mb-3 font-black uppercase tracking-[0.4em] leading-none opacity-80">
+                            MISSION PAYLOAD</p>
+                        <p class="text-4xl font-black text-white uppercase tracking-tighter leading-none"
+                            x-text="currentPair[0]"></p>
+                    </div>
+                </div>
+                <div class="glass p-8 rounded-[3.5rem] mb-10 border-white/5 relative overflow-hidden">
+                    <h3 class="text-[10px] text-slate-600 font-black uppercase tracking-[0.6em] mb-8 opacity-80">Hub
+                        Ranking Board</h3>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[35vh] overflow-y-auto custom-scrollbar pr-2">
+                        <template x-for="p in roles">
+                            <div class="flex items-center justify-between p-4 bg-white/5 rounded-[1.5rem] border border-white/5 hover:bg-white/10 transition-all group"
+                                :class="p.isImposter ? 'border-red-500/60 shadow-red-glow' : ''">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-800 flex items-center justify-center text-[10px] font-black text-white shadow-xl uppercase border border-white/5"
+                                        x-text="p.name[0]"></div>
+                                    <div class="text-left">
+                                        <p class="text-sm font-black text-white uppercase tracking-tighter leading-none truncate max-w-[100px]"
+                                            x-text="p.name"></p>
+                                        <span x-show="p.isImposter"
+                                            class="mt-1.5 inline-block text-[7px] text-red-500 font-black uppercase tracking-[0.4em] italic leading-none animate-pulse">STATUS:
+                                            EXPOSED</span>
+                                    </div>
+                                </div>
+                                <span class="text-2xl font-black text-white leading-none px-3 opacity-90"
+                                    x-text="scores[p.peerID] || 0"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <button @click="returnToLobby()"
+                        class="btn-premium flex-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-800 py-6 rounded-[2rem] font-black uppercase tracking-[0.4em] text-white shadow-xl text-base">Next
+                        Extraction</button>
+                    <button @click="location.reload()"
+                        class="btn-premium px-10 bg-white/5 border border-white/10 rounded-[2rem] font-black uppercase tracking-[0.3em] text-slate-600 text-[9px] hover:bg-white/10">Terminate
+                        Hub</button>
+                </div>
+            </div>
+        </template>
+
+        <div class="fixed bottom-10 left-1/2 -translate-x-1/2 px-8 py-4 glass border-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.5em] text-indigo-400 shadow-2xl z-50 transition-all duration-500 translate-y-20 opacity-0"
+            :class="toastActive ? 'toast-active' : ''">
+            Mission Link Copied to Terminal
+        </div>
+    </div>
+
+    <script>
+        function protocolApp() {
+            return {
+                step: 'landing', roomID: '', peer: null, conn: null, connections: {},
+                playerName: '', joinCode: '', isHost: false, players: [],
+                status: 'offline', signaling: false, myRole: null, roles: [], clues: [], clueInput: '',
+                activePlayerIndex: 0, activePlayerName: '', isMyTurn: false,
+                currentRound: 1, timer: 30, timerInterval: null, hasVoted: false, wordVisible: false,
+                readyToChat: false, readyPlayers: [],
+                voteCounts: {}, winner: null, currentPair: [], myPeerID: '',
+                toastActive: false, urlRoomMatched: false,
+                scores: JSON.parse(localStorage.getItem('undercover_scores') || '{}'),
+                wordPairs: [
+                    ['Coffee', 'Tea'], ['Lion', 'Tiger'], ['Pizza', 'Burger'], ['Sun', 'Moon'], ['Laptop', 'Desktop'], 
+                    ['River', 'Mountain'], ['Sword', 'Shield'], ['Forest', 'Desert'], ['Paris', 'London'], ['Radio', 'Podcast'],
+                    ['Airplane', 'Helicopter'], ['Bicycle', 'Motorcycle'], ['Camera', 'Phone'], ['Eagle', 'Falcon'], ['Violin', 'Cello'],
+                    ['Actor', 'Director'], ['Doctor', 'Nurse'], ['Football', 'Rugby'], ['Movie', 'Series'], ['TikTok', 'Instagram'],
+                    ['Mars', 'Venus'], ['Robot', 'AI'], ['Bitcoin', 'Ethereum'], ['Batman', 'Superman'], ['Marvel', 'DC'],
+                    ['Safari', 'Chrome'], ['Linux', 'Windows'], ['Python', 'JavaScript'], ['Cat', 'Kitten'], ['Dog', 'Puppy'],
+                    ['Bread', 'Cake'], ['Milk', 'Yogurt'], ['Diamond', 'Gold'], ['Silver', 'Platinum'], ['Hurricane', 'Tornado'],
+                    ['Volcano', 'Geyser'], ['Whale', 'Dolphin'], ['Spider', 'Ant'], ['Beer', 'Wine'], ['Math', 'Science'],
+                    ['Earth', 'Mars'], ['Black', 'White'], ['Red', 'Blue'], ['Rain', 'Snow'], ['Fire', 'Ice'],
+                    ['Apple', 'Banana'], ['Car', 'Truck'], ['Ship', 'Boat'], ['Key', 'Lock'], ['Chair', 'Table'],
+                    ['Sofa', 'Couch'], ['Guitar', 'Ukulele'], ['Pen', 'Pencil'], ['Watch', 'Clock'], ['Hammer', 'Wrench'],
+                    ['Bridge', 'Tunnel'], ['Island', 'Peninsula'], ['Cake', 'Cookie'], ['Honey', 'Sugar'], ['Soap', 'Shampoo'],
+                    ['Mirror', 'Glass'], ['Star', 'Planet'], ['Cloud', 'Fog'], ['Orange', 'Lemon'], ['Grape', 'Strawberry'],
+                    ['Salt', 'Pepper'], ['Paper', 'Cardboard'], ['Hat', 'Cap'], ['Shirt', 'Jacket'], ['Shoes', 'Socks'],
+                    ['Park', 'Garden'], ['School', 'College'], ['City', 'Village'], ['Market', 'Mall'], ['Bank', 'ATM'],
+                    ['Ocean', 'Sea'], ['Lake', 'Pond'], ['Pool', 'River'], ['Grass', 'Leaf'], ['Flower', 'Bush'],
+                    ['Elephant', 'Giraffe'], ['Zebra', 'Horse'], ['Cow', 'Sheep'], ['Pig', 'Goat'], ['Chicken', 'Duck'],
+                    ['Snake', 'Lizard'], ['Frog', 'Toad'], ['Bee', 'Wasp'], ['Fly', 'Mosquito'], ['Butterfly', 'Moth'],
+                    ['Book', 'Magazine'], ['Newspaper', 'Journal'], ['Letter', 'Email'], ['Call', 'Text'], ['Music', 'Podcast'],
+                    ['Game', 'Sport'], ['Tennis', 'Badminton'], ['Golf', 'Hockey'], ['Swim', 'Dive'], ['Run', 'Jump'],
+                    ['Circle', 'Square'], ['Triangle', 'Oval'], ['Line', 'Dot'], ['Blue', 'Purple'], ['Green', 'Yellow'],
+                    ['Hot', 'Warm'], ['Cold', 'Cool'], ['Fast', 'Quick'], ['Slow', 'Steady'], ['Big', 'Large'],
+                    ['Small', 'Tiny'], ['New', 'Fresh'], ['Old', 'Ancient'], ['Good', 'Great'], ['Bad', 'Poor'],
+                    ['Light', 'Bright'], ['Dark', 'Dim'], ['Soft', 'Smooth'], ['Hard', 'Rough'], ['Sweet', 'Sour'],
+                    ['Bread', 'Toast'], ['Egg', 'Omelette'], ['Soup', 'Stew'], ['Salad', 'Sandwich'], ['Meat', 'Fish'],
+                    ['Rice', 'Pasta'], ['Noodle', 'Potato'], ['Onion', 'Garlic'], ['Carrot', 'Tomato'], ['Cucumber', 'Pickle'],
+                    ['Coke', 'Pepsi'], ['Sprite', '7Up'], ['Beer', 'Cider'], ['Vodka', 'Gin'], ['Whiskey', 'Rum'],
+                    ['Paris', 'Rome'], ['Tokyo', 'Osaka'], ['New York', 'Los Angeles'], ['Berlin', 'Munich'], ['Madrid', 'Barcelona'],
+                    ['Piano', 'Keyboard'], ['Drum', 'Bass'], ['Mic', 'Speaker'], ['Headphone', 'Earbud'], ['Record', 'CD']
+                ],
+                initHub() {
+                    const params = new URLSearchParams(window.location.search);
+                    if (params.has('room')) {
+                        this.joinCode = params.get('room').toUpperCase();
+                        this.urlRoomMatched = true;
+                    }
+                },
+                copyLink() {
+                    const url = window.location.origin + window.location.pathname + '?room=' + this.roomID;
+                    navigator.clipboard.writeText(url).then(() => {
+                        this.toastActive = true;
+                        setTimeout(() => this.toastActive = false, 3000);
+                    });
+                },
+                createRoom() {
+                    this.signaling = true; this.status = 'connecting';
+                    const code = Math.random().toString(36).substring(2, 6).toUpperCase();
+                    this.roomID = code; this.isHost = true;
+                    this.peer = new Peer('el-' + code, { debug: 1 });
+                    this.peer.on('open', id => { this.status = 'online'; this.signaling = false; this.myPeerID = id; this.players = [{ name: this.playerName, peerID: id }]; this.step = 'lobby'; });
+                    this.peer.on('connection', conn => {
+                        this.connections[conn.peer] = conn;
+                        conn.on('data', data => this.handleHostData(data, conn.peer));
+                        conn.on('close', () => this.handleDisconnect(conn.peer));
+                    });
+                    this.peer.on('error', err => { this.status = 'error'; this.signaling = false; alert('ID Frequency Overlap. Refresh Hub.'); });
+                },
+                joinRoom() {
+                    this.signaling = true; this.status = 'connecting';
+                    const code = this.joinCode.toUpperCase();
+                    this.roomID = code; this.isHost = false;
+                    this.peer = new Peer({ debug: 1 });
+                    this.peer.on('open', id => {
+                        this.myPeerID = id;
+                        this.conn = this.peer.connect('el-' + code, { metadata: { name: this.playerName } });
+                        this.conn.on('open', () => { this.status = 'online'; this.signaling = false; this.sendToHost({ type: 'join', name: this.playerName }); this.step = 'lobby'; });
+                        this.conn.on('data', data => this.handleClientData(data));
+                        this.conn.on('close', () => { this.step = 'landing'; alert('Sync Lost.'); });
+                    });
+                },
+                handleHostData(data, fromID) {
+                    if (data.type === 'join') {
+                        if (!this.players.find(p => p.peerID === fromID)) {
+                            this.players.push({ name: data.name, peerID: fromID });
+                            this.broadcast({ type: 'players_update', players: this.players });
+                        }
+                    }
+                    if (data.type === 'ready_check') {
+                        if (!this.readyPlayers.includes(fromID)) {
+                            this.readyPlayers.push(fromID);
+                            if (this.readyPlayers.length >= this.players.length) setTimeout(() => this.hostInitializeTurns(), 500);
+                        }
+                    }
+                    if (data.type === 'clue_entry') {
+                        this.clues.push({ player: data.name, text: data.text, round: this.currentRound });
+                        this.broadcast({ type: 'clue_broadcast', clues: this.clues });
+                        this.hostRotateTurn();
+                    }
+                    if (data.type === 'vote_cast') {
+                        this.voteCounts[data.targetID] = (this.voteCounts[data.targetID] || 0) + 1;
+                        this.broadcast({ type: 'vote_sync', voteCounts: this.voteCounts });
+                        if (Object.values(this.voteCounts).reduce((a, b) => a + b, 0) >= this.players.length) setTimeout(() => this.hostProcessResults(), 500);
+                    }
+                },
+                handleClientData(data) {
+                    if (data.type === 'players_update') this.players = data.players;
+                    if (data.type === 'return_to_lobby') this.step = 'lobby';
+                    if (data.type === 'kick') { this.conn.close(); this.step = 'landing'; alert('Manual Extraction Issued.'); }
+                    if (data.type === 'game_start') {
+                        this.roles = data.roles; this.myRole = this.roles.find(r => r.peerID === this.myPeerID); this.currentPair = data.pair;
+                        this.wordVisible = false; this.readyToChat = false; this.clues = []; this.currentRound = 1; this.hasVoted = false; this.voteCounts = {};
+                        this.step = 'reveal';
+                    }
+                    if (data.type === 'clue_broadcast') this.clues = data.clues;
+                    if (data.type === 'turn_order') {
+                        this.step = 'active'; this.activePlayerIndex = data.idx; this.currentRound = data.round;
+                        this.activePlayerName = this.roles[this.activePlayerIndex].name;
+                        this.isMyTurn = (this.roles[this.activePlayerIndex].peerID === this.myPeerID);
+                        this.startTimer();
+                    }
+                    if (data.type === 'vote_init') { this.step = 'vote'; this.hasVoted = false; this.voteCounts = {}; }
+                    if (data.type === 'vote_sync') { this.voteCounts = data.voteCounts; }
+                    if (data.type === 'result') {
+                        this.winner = data.winner; this.currentPair = data.pair; this.scores = data.scores;
+                        localStorage.setItem('undercover_scores', JSON.stringify(this.scores));
+                        this.step = 'result';
+                    }
+                },
+                hostStartGame() {
+                    const pair = this.wordPairs[Math.floor(Math.random() * this.wordPairs.length)];
+                    this.currentPair = pair;
+                    const tempPlayers = [...this.players];
+                    this.shuffle(tempPlayers);
+                    const imposterIdx = Math.floor(Math.random() * tempPlayers.length);
+                    const imposterPeerID = tempPlayers[imposterIdx].peerID;
+                    this.roles = this.players.map(p => ({
+                        peerID: p.peerID,
+                        name: p.name,
+                        word: (p.peerID === imposterPeerID) ? pair[1] : pair[0],
+                        isImposter: p.peerID === imposterPeerID
+                    }));
+                    this.readyPlayers = []; this.voteCounts = {};
+                    this.broadcast({ type: 'game_start', roles: this.roles, pair: pair });
+                    this.handleClientData({ type: 'game_start', roles: this.roles, pair: pair });
+                },
+                returnToLobby() { if (this.isHost) { this.broadcast({ type: 'return_to_lobby' }); this.step = 'lobby'; } },
+                kickPlayer(peerID) {
+                    if (this.isHost) {
+                        const conn = this.connections[peerID];
+                        if (conn) { conn.send({ type: 'kick' }); setTimeout(() => conn.close(), 500); }
+                        this.players = this.players.filter(p => p.peerID !== peerID);
+                        this.broadcast({ type: 'players_update', players: this.players });
+                    }
+                },
+                handleDisconnect(peerID) {
+                    this.players = this.players.filter(p => p.peerID !== peerID);
+                    this.broadcast({ type: 'players_update', players: this.players });
+                },
+                markReady() {
+                    this.readyToChat = true;
+                    if (this.isHost) this.handleHostData({ type: 'ready_check' }, this.myPeerID);
+                    else this.sendToHost({ type: 'ready_check' });
+                },
+                hostInitializeTurns() { this.activePlayerIndex = 0; this.currentRound = 1; this.broadcastTurnOrder(); },
+                broadcastTurnOrder() {
+                    const data = { type: 'turn_order', idx: this.activePlayerIndex, round: this.currentRound };
+                    this.broadcast(data); this.handleClientData(data);
+                },
+                hostRotateTurn() {
+                    this.activePlayerIndex++;
+                    if (this.activePlayerIndex >= this.players.length) {
+                        this.activePlayerIndex = 0;
+                        this.currentRound++;
+                        if (this.currentRound > 2) {
+                            this.broadcast({ type: 'vote_init' });
+                            this.handleClientData({ type: 'vote_init' });
+                            return;
+                        }
+                    }
+                    this.broadcastTurnOrder();
+                },
+                startTimer() {
+                    clearInterval(this.timerInterval); this.timer = 15 + Math.floor(Math.random() * 20);
+                    this.timer = 30;
+                    if (this.isMyTurn) {
+                        this.timerInterval = setInterval(() => {
+                            this.timer--;
+                            if (this.timer <= 0) { clearInterval(this.timerInterval); this.submitClue('INTELLIGENCE SYNC TIMEOUT'); }
+                        }, 1000);
+                    }
+                },
+                submitClue() {
+                    clearInterval(this.timerInterval);
+                    const text = this.clueInput || 'RADIO SILENCE';
+                    const data = { type: 'clue_entry', name: this.playerName, text: text };
+                    this.isHost ? this.handleHostData(data, this.myPeerID) : this.sendToHost(data);
+                    this.clueInput = '';
+                },
+                handleVoteClick(targetID) { this.hasVoted = true; const data = { type: 'vote_cast', targetID: targetID }; this.isHost ? this.handleHostData(data, this.myPeerID) : this.sendToHost(data); },
+                hostProcessResults() {
+                    const sorted = Object.entries(this.voteCounts).sort((a, b) => b[1] - a[1]);
+                    const eliminatedID = sorted[0][0];
+                    const player = this.roles.find(r => r.peerID === eliminatedID);
+                    const winner = player && player.isImposter ? 'citizens' : 'infiltrator';
+                    this.roles.forEach(r => {
+                        const earnedTrue = (winner === 'citizens' && !r.isImposter) || (winner === 'infiltrator' && r.isImposter) ? 1 : 0;
+                        this.scores[r.peerID] = (this.scores[r.peerID] || 0) + earnedTrue;
+                    });
+                    const finalData = { type: 'result', winner: winner, pair: this.currentPair, scores: this.scores };
+                    this.broadcast(finalData); this.handleClientData(finalData);
+                },
+                sendToHost(data) { if (this.conn) this.conn.send(data); },
+                broadcast(data) { Object.values(this.connections).forEach(c => c.send(data)); },
+                shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; } }
+            }
+        }
+    </script>
+</body>
+
+</html>
